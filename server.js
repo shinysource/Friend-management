@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
+const db = require("./app/models");
+
 const app = express();
 
 var corsOptions = {
@@ -18,6 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to friend application." });
+});
+
+// database
+db.sequelize.sync(() => {
 });
 
 // set port, listen for requests
