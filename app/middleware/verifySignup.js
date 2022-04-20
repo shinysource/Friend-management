@@ -5,7 +5,9 @@ const User = db.user;
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   if (!req.body.username || !req.body.email) {
     res.status(400).send({
-      message: "Failed! Enter your name and email"
+      data: {
+        message: "Failed! Enter your name and email"
+      }
     })
     return
   }
@@ -18,7 +20,9 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   }).then(user => {
     if (user) {
       res.status(422).json({
-        message: "Failed! Username is already in use!"
+        data: {
+          message: "Failed! Username is already in use!"
+        }
       });
       return;
     }
@@ -31,7 +35,9 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     }).then(user => {
       if (user) {
         res.status(422).json({
-          message: "Failed! Email is already in use!"
+          data: {
+            message: "Failed! Email is already in use!"
+          }
         });
         return;
       }
@@ -44,7 +50,9 @@ checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
     if (!ROLES.includes(req.body.roles)) {
       res.status(400).send({
-        message: "Failed! Role does not exist = " + req.body.roles
+        data: {
+          message: "Failed! Role does not exist = " + req.body.roles
+        }
       });
       return;
     }
