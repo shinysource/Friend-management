@@ -1,0 +1,27 @@
+{
+  "name": "friend-management",
+  "version": "1.0.0",
+  "description": "Node.js Rest Apis with Express, Sequelize & MySQL",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flyingskyhigh/Friend-Management.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "sequelize",
+    "mysql",
+    "rest",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flyingskyhigh/Friend-Management/issues"
+  },
+  "homepage": "https://github.com/flyingskyhigh/Friend-Management#readme"
+}
