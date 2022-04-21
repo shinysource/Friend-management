@@ -18,8 +18,14 @@ module.exports = function(app) {
 
   app.get(
     "/api/friends/",
-    [authJwt.verifyToken],
+    [authJwt.verifyToken, isAdmin],
     controller.findAll
+  )
+
+  app.get(
+    "/api/friends/:userId",
+    [authJwt.verifyToken],
+    controller.findByUserId
   );
 
   app.get(
