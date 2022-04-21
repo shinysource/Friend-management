@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
 import { setChecked, verify, signout } from 'store/auth'
 
-const pages = ['Friends']
+const pages = ['Friend']
 const settings = ['Profile']
 
 const Header = () => {
