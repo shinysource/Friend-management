@@ -22,20 +22,21 @@ const App = () => {
 
   useEffect(() => {
     if (!verified && localStorage.getItem('token')) {
-      console.log(localStorage.getItem('token'))
       dispatch(verify())
+      console.log(localStorage.getItem('token'))
     } else {
+      console.log('App setVerified')
       dispatch(setVerified(true))
     }
-  }, [dispatch, user, verified])
+  }, [dispatch, verified])
 
   const renderAuth = () => {
     return (
       <Routes>
+        <Route path="/" element={<SigninPage />}></Route>
         <Route path="/registration" element={<SignupPage />}></Route>
-        <Route path="/login" element={<SigninPage />}></Route>
 
-        <Route path="*" element={<Navigate to="/registration" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     )
   }
@@ -44,12 +45,12 @@ const App = () => {
     return (
       <Routes>
         <Route path="/*" element={<Main />} />
-        <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     )
   }
   return (
     <>
+      <ToastContainer />
       {!verified || loading ? (
         <Mui.CircularProgress />
       ) : (
