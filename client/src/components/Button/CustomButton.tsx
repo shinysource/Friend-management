@@ -1,4 +1,5 @@
 import Button, { ButtonProps } from '@mui/material/Button'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { FormGroup } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -73,6 +74,7 @@ export type CustomButtonProps = ButtonProps<
   {
     model: 'primary' | 'secondary' | 'text'
     label: string
+    loading?: boolean
     className?: string
     fontColor?: string
     size?: string
@@ -82,6 +84,7 @@ export type CustomButtonProps = ButtonProps<
 const CustomButton = ({
   model,
   label,
+  loading,
   className,
   fontColor,
   onClick,
@@ -93,7 +96,8 @@ const CustomButton = ({
   return (
     <ThemeProvider theme={theme}>
       <FormGroup>
-        <Button
+        <LoadingButton
+          loading={loading || false}
           className={`${classes[model]} ${
             classes[size || 'large']
           } ${className}`}
@@ -101,7 +105,7 @@ const CustomButton = ({
           {...rest}
         >
           {label}
-        </Button>
+        </LoadingButton>
       </FormGroup>
     </ThemeProvider>
   )
