@@ -130,7 +130,7 @@ exports.signin =
           data: {
             user: user,
             token: token,
-            message: "You are login successfully!"
+            message: "Login successfully!"
           }
         });
       });
