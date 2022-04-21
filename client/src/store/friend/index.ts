@@ -42,6 +42,7 @@ export const updateFriend = createAsyncThunk(
   async (friend: Required<Friend>, { rejectWithValue }) => {
     try {
       const response = await api.updateFriend(friend)
+      return response.data
     } catch (error) {
       const err = error as any
       throw rejectWithValue(err.response?.data)
@@ -54,6 +55,7 @@ export const deleteFriend = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await api.deleteFriend(id)
+      return response.data
     } catch (error) {
       const err = error as any
       throw rejectWithValue(err.response?.data)
