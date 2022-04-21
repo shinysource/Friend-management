@@ -103,6 +103,20 @@ export const authSlice = createSlice({
         state.loading = false
         state.verified = true
       })
+      .addCase(signin.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(signin.fulfilled, (state, action) => {
+        state.loading = false
+        const { data } = action.payload
+        state.user = data.user
+        state.checked = true
+        localStorage.setItem('token', data.token)
+      })
+      .addCase(signin.rejected, (state) => {
+        state.loading = false
+        state.checked = false
+      })
   }
 })
 
