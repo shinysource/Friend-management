@@ -59,7 +59,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     signout: (state) => {
-      localStorage.removeItem('toekn')
+      localStorage.removeItem('token')
       state.user = initialState.user
       state.checked = false
       state.loading = false
