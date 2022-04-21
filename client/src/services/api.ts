@@ -27,10 +27,10 @@ const createAxiosInstance = (baseURL: string, timeout: number) => {
     },
     (error) => {
       if (error.response?.status === 500) {
-        toast.error(error.response?.message)
+        toast.error(error.response?.data.data.message)
       }
       if (error.response?.status >= 400 && error.response?.status < 500) {
-        toast.error(error.response?.message)
+        toast.error(error.response?.data.data.message)
       }
 
       throw error
@@ -55,8 +55,8 @@ const apiService = {
   getFriendByUserId: (userId: number) =>
     gateway.get<FriendResult>('friends/' + userId),
   updateFriend: (friend: Required<Friend>) =>
-    gateway.put<FriendState>('friends/' + friend.id, friend),
-  deleteFriend: (id: number) => gateway.delete('friends/' + id)
+    gateway.put<FriendResult>('friends/' + friend.id, friend),
+  deleteFriend: (id: number) => gateway.delete<FriendResult>('friends/' + id)
 }
 
 export default apiService
