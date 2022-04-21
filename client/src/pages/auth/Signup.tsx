@@ -188,7 +188,7 @@ const Signup = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Link to="/login">Already have an account? Sign In</Link>
+              <Link to="/">Already have an account? Sign In</Link>
             </Grid>
           </Grid>
         </form>

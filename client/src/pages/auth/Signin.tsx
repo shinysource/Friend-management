@@ -46,7 +46,7 @@ const Signin = () => {
         .unwrap()
         .then((resolve) => {
           toast.success(resolve.data.message)
-          navigate('/')
+          navigate('/home')
         })
         .catch((error) => {
           toast.error(error.message)
