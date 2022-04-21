@@ -7,11 +7,33 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "jest",
-    "lint": "eslint src --max-warnings=0"
+    "lint": "eslint src --max-warnings=0",
+    "watch:css": "postcss src/styles/tailwind.css -o src/styles/output.css"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.6.0",
+    "@mui/material": "^5.6.0",
+    "@mui/styles": "^5.6.0",
+    "@reduxjs/toolkit": "^1.8.1",
+    "@types/country-data": "^0.0.2",
+    "@types/react-select-country-list": "^2.2.0",
+    "axios": "^0.26.1",
+    "country-code-lookup": "^0.0.20",
+    "country-data": "^0.0.31",
+    "dotenv": "^16.0.0",
+    "formik": "^2.2.9",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-phone-input": "^1.2.1",
+    "react-phone-input-2": "^2.15.0",
+    "react-phone-number-input": "^3.1.49",
+    "react-redux": "^8.0.0",
+    "react-router-dom": "^6.3.0",
+    "react-select-country-list": "^2.2.3",
+    "react-toastify": "^8.2.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",

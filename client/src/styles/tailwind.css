@@ -1,3 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
+
+@import url('//hello.myfonts.net/count/46e626');
+
+@font-face {
+  font-family: 'PODIUMSharp-49';
+  src: url('/public/webFonts/PODIUMSharp49/font.woff2') format('woff2'),
+    url('/public/webFonts/PODIUMSharp49/font.woff') format('woff');
+}
+@font-face {
+  font-family: 'PODIUMSharp-96';
+  src: url('/public/webFonts/PODIUMSharp96/font.woff2') format('woff2'),
+    url('/public/webFonts/PODIUMSharp96/font.woff') format('woff');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body * {
+  @apply font-inter;
+}
+
+.signup-back {
+  @apply min-h-screen;
+}
