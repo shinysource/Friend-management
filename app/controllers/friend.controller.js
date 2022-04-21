@@ -44,10 +44,37 @@ exports.findAll = (req, res) => {
     {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
     {email: email ? { email: email } : null}
   ]}
+
+  Friend.findAll({ where: condition })
+    .then(friend => {
+      res.status(200).send({
+        data: { 
+          friend: friend,
+          message: 'Some friends was retrieved successfully'
+        }
+      })
+    })
+    .catch(err => {
+      res.status(500).send({
+        data: {
+          message: err.message || "Some error occured while retrieving friends."
+        }
+      })
+    })
+};
+
+exports.findByUserId = (req, res) => {
+  const friendname = req.query.friendname
+  const email = req.query.email
+  
+  let condition = {[Op.or]: [
+    {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
+    {email: email ? { email: email } : null}
+  ]}
   condition = {[Op.and]: [
     {userId: req.user.id}
   ]}
-
+  
   Friend.findAll({ where: condition })
     .then(friend => {
       res.status(200).send({
