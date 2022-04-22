@@ -125,7 +125,14 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id
 
-  Friend.update(req.body, {
+  Friend.update({
+    friendname: req.body.friendname,
+    email: req.body.email,
+    gender: req.body.gender,
+    age: req.body.age,
+    hobbies: req.body.hobbies,
+    description: req.body.description
+  }, {
     where: { id: id }
   })
     .then(num => {
