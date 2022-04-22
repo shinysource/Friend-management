@@ -5,8 +5,8 @@ import { Credentials, SignInfo, AuthResult } from 'store/auth/types'
 import {
   NewFriend,
   Friend,
-  FriendState,
-  FriendResult
+  FriendsState,
+  FriendsResult
 } from 'store/friend/types'
 
 const createAxiosInstance = (baseURL: string, timeout: number) => {
@@ -50,13 +50,14 @@ const apiService = {
     gateway.post<AuthResult>('auth/signin', signinfo),
 
   createFriend: (newFriend: Required<NewFriend>) =>
-    gateway.post<FriendResult>('friends/', newFriend),
-  getFriend: () => gateway.get<FriendResult>('friends'),
+    gateway.post<FriendsResult>('friends/', newFriend),
+  getFriend: () => gateway.get<FriendsResult>('friends'),
   getFriendByUserId: (userId: number) =>
-    gateway.get<FriendResult>('friends/' + userId),
+    gateway.get<FriendsResult>('friends/' + userId),
+  getFriendById: (id: number) => gateway.get<FriendsResult>('friends/id/' + id),
   updateFriend: (friend: Required<Friend>) =>
-    gateway.put<FriendResult>('friends/' + friend.id, friend),
-  deleteFriend: (id: number) => gateway.delete<FriendResult>('friends/' + id)
+    gateway.put<FriendsResult>('friends/' + friend.id, friend),
+  deleteFriend: (id: number) => gateway.delete<FriendsResult>('friends/' + id)
 }
 
 export default apiService
