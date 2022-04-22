@@ -76,6 +76,9 @@ export const friendSlice = createSlice({
         state.loading = false
         state.updated = true
       })
+      .addCase(createFriend.rejected, (state, action) => {
+        state.loading = false
+      })
       .addCase(getFriendByUserId.pending, (state) => {
         state.loading = true
       })

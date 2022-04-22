@@ -50,7 +50,7 @@ const apiService = {
     gateway.post<AuthResult>('auth/signin', signinfo),
 
   createFriend: (newFriend: Required<NewFriend>) =>
-    gateway.post<FriendResult>('auth/', newFriend),
+    gateway.post<FriendResult>('friends/', newFriend),
   getFriend: () => gateway.get<FriendResult>('friends'),
   getFriendByUserId: (userId: number) =>
     gateway.get<FriendResult>('friends/' + userId),
