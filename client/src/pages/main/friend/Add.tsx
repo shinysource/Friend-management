@@ -17,6 +17,7 @@ import {
 import Divider from '@mui/material/Divider'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import { deepOrange, green } from '@mui/material/colors'
 
@@ -66,9 +67,7 @@ const Add = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
-  const { loading, friends } = useAppSelector(
-    (state: RootState) => state.friend
-  )
+  const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
   const formik = useFormik({
     initialValues,
@@ -79,7 +78,7 @@ const Add = () => {
         .unwrap()
         .then((resolve) => {
           toast.success('Friend was added successfully')
-          navigate('/friends')
+          navigate('/friend')
         })
         .catch((error) => {
           toast.error(error.message)
