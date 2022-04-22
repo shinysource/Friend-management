@@ -9,6 +9,7 @@ export interface NewFriend {
 
 export interface Friend {
   id: number
+  friendname: string
   email: string
   gender: string
   age: number
@@ -17,16 +18,23 @@ export interface Friend {
   userId: number
 }
 
-export interface FriendState {
-  friends: Friend[]
+export interface FriendsState {
+  friend: Friend[]
   errors?: string
   loading: boolean
   updated: boolean
 }
 
-export interface FriendResult {
+export interface FriendsResult {
   data: {
-    friends: Friend[]
+    friend: Friend[]
     message: string
   }
 }
+
+// export interface FriendResult {
+//   data: {
+//     friend: Friend
+//     message: string
+//   }
+// }
