@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { NewFriend, Friend, FriendState, FriendResult } from './types'
+import { NewFriend, Friend, FriendsState, FriendsResult } from './types'
 
 import api from 'services/api'
 
-const initialState: FriendState = {
-  friends: [],
+const initialState: FriendsState = {
+  friend: [],
   errors: '',
   loading: false,
   updated: false
@@ -29,6 +29,19 @@ export const getFriendByUserId = createAsyncThunk(
   async (userId: number) => {
     try {
       const response = await api.getFriendByUserId(userId)
+      return response.data
+    } catch (error) {
+      const err = error as any
+      throw err.response?.data
+    }
+  }
+)
+
+export const getFriendById = createAsyncThunk(
+  'friend/getFriendById',
+  async (id: number) => {
+    try {
+      const response = await api.getFriendById(id)
       return response.data
     } catch (error) {
       const err = error as any
@@ -85,7 +98,18 @@ export const friendSlice = createSlice({
       .addCase(getFriendByUserId.fulfilled, (state, action) => {
         state.loading = false
         state.updated = false
-        state.friends = action.payload.data.friends
+        state.friend = action.payload.data.friend
+      })
+      .addCase(getFriendById.rejected, (state) => {
+        state.loading = false
+      })
+      .addCase(getFriendById.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(getFriendById.fulfilled, (state, action) => {
+        state.loading = false
+        state.updated = false
+        state.friend = action.payload.data.friend
       })
       .addCase(getFriendByUserId.rejected, (state) => {
         state.loading = false
