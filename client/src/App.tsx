@@ -23,9 +23,7 @@ const App = () => {
   useEffect(() => {
     if (!verified && localStorage.getItem('token')) {
       dispatch(verify())
-      console.log(localStorage.getItem('token'))
     } else {
-      console.log('App setVerified')
       dispatch(setVerified(true))
     }
   }, [dispatch, verified])

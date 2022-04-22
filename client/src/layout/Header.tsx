@@ -45,7 +45,6 @@ const Header = () => {
   }
 
   const handleSignout = () => {
-    console.log('Log out')
     dispatch(signout())
     // navigate('/signin')
   }
