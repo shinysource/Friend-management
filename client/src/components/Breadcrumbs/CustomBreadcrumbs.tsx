@@ -14,7 +14,10 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/friend': 'Friend',
   '/friend/add': 'Add',
   '/friend/edit': 'Edit',
-  '/profile': 'Profile'
+  '/profile': 'Profile',
+  '/user': 'User',
+  '/user/add': 'Add',
+  '/user/edit': 'Edit'
 }
 
 interface LinkRouterProps extends LinkProps {
@@ -22,18 +25,22 @@ interface LinkRouterProps extends LinkProps {
   replace?: string
 }
 
+interface BreadcrumbsProps {
+  root?: string
+}
+
 const LinkRouter = (props: LinkRouterProps) => (
   <Link {...props} component={RouterLink as any} />
 )
 
-const CustomBreadcrumbs = () => {
+const CustomBreadcrumbs = ({ root }: BreadcrumbsProps) => {
   const loaction = useLocation()
   const pathnames = loaction.pathname.split('/').filter((x) => x)
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
       <LinkRouter underline="hover" color="inherit" to="/home">
-        User
+        {root ? root : 'user'}
       </LinkRouter>
       {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1
