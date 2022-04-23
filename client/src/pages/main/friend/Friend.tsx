@@ -24,7 +24,12 @@ import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
 
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { RootState } from '../../../store/store'
-import { getFriendByUserId, updateFriend, deleteFriend } from 'store/friend'
+import {
+  getFriendByUserId,
+  updateFriend,
+  deleteFriend,
+  getFriendByEmail
+} from 'store/friend'
 
 import Header from 'layout/Header'
 
@@ -109,8 +114,6 @@ const Friend = () => {
       })
   }, [dispatch, updated])
 
-  const handleChange = () => {}
-
   return (
     <>
       <Header />
@@ -134,7 +137,7 @@ const Friend = () => {
             </Grid>
           </CardHeader>
           <CardContent>
-            <Grid item container sm={11} lg={10} justifyContent="space-between">
+            <Grid item container sm={12} lg={12} justifyContent="space-between">
               <Grid item xs={2}>
                 <Link to="/friend/add">
                   <CustomButton
@@ -145,15 +148,6 @@ const Friend = () => {
                     startIcon={<PlusOneIcon fontSize="large" />}
                   />
                 </Link>
-              </Grid>
-              <Grid item xs={2}>
-                <FormInput
-                  type="text"
-                  name="friendname"
-                  handleChange={handleChange}
-                  label="Search your friend"
-                  placeholder="Name and Email"
-                />
               </Grid>
             </Grid>
             <Grid container py={2} spacing={3}>
