@@ -37,19 +37,19 @@ exports.create = [check('friendname', 'Friendname is required').not().isEmpty(),
 }]
 
 exports.findAll = (req, res) => {
-  const friendname = req.query.friendname
-  const email = req.query.email
+  // const friendname = req.query.friendname
+  // const email = req.query.email
   
-  let condition = {[Op.or]: [
-    {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
-    {email: email ? { email: email } : null}
-  ]}
+  // let condition = {[Op.or]: [
+  //   {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
+  //   {email: email ? { email: email } : null}
+  // ]}
 
-  Friend.findAll({ where: condition })
+  Friend.findAll()
     .then(friend => {
       res.status(200).send({
         data: { 
-          friend: friend,
+          friends: friend,
           message: 'Some friends was retrieved successfully'
         }
       })
@@ -64,13 +64,13 @@ exports.findAll = (req, res) => {
 };
 
 exports.findByUserId = (req, res) => {
-  const friendname = req.query.friendname
-  const email = req.query.email
+  // const friendname = req.query.friendname
+  // const email = req.query.email
   
-  let condition = {[Op.or]: [
-    {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
-    {email: email ? { email: email } : null}
-  ]}
+  // let condition = {[Op.or]: [
+  //   {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
+  //   {email: email ? { email: email } : null}
+  // ]}
   condition = {[Op.and]: [
     {userId: req.user.id}
   ]}
@@ -79,7 +79,7 @@ exports.findByUserId = (req, res) => {
     .then(friend => {
       res.status(200).send({
         data: { 
-          friend: friend,
+          friends: friend,
           message: 'Some friends was retrieved successfully'
         }
       })

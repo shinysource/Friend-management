@@ -4,16 +4,16 @@ const User = db.user;
 const Op = db.Sequelize.Op;
 
 exports.findAll = (req, res) => {
-  const username = req.query.username
-  const email = req.query.email
+  // const username = req.query.username
+  // const email = req.query.email
 
-  let condition = username ? { username: { [Op.like]: `%${username}%` } } : null
-  condition = email ? { email: email } : null
-  User.findAll({ where: condition })
+  // let condition = username ? { username: { [Op.like]: `%${username}%` } } : null
+  // condition = email ? { email: email } : null
+  User.findAll()
     .then(user => {
       res.status(200).send({
         data: {
-          user: user,
+          users: user,
           message: 'Some users are retrieved successfully'
         }
       })

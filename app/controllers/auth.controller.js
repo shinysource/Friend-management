@@ -11,11 +11,27 @@ const Role = db.role;
 const Op = db.Sequelize.Op;
 
 exports.verify = (req, res) => {
-  res.status(200).json({
-    data: {
-      user: req.user,
-      message: "Authorized succesfully"
-    } 
+  let role = ''
+  req.user.getRoles().then(roles => {
+    for (let i = 0; i < roles.length; i++) {
+      if (typeof roles[i].name === 'string') {
+        role = roles[i].name
+      }
+    }
+    req.user.roles = role
+    user = {
+      id: req.user.id,
+      username: req.user.username,
+      email: req.user.email,
+      password: req.user.password,
+      roles: req.user.roles
+    }
+    res.status(200).json({
+      data: {
+        user: user,
+        message: "Authorized succesfully"
+      } 
+    })
   })
 }
 
@@ -52,10 +68,17 @@ exports.signup =
           }
         }).then(roles => {
           user.setRoles(roles).then(() => {
+            temp = {
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              password: user.password,
+              roles: req.body.roles
+            }
             res.status(200).json(
               {
                 data: {
-                  user: user,
+                  user: temp,
                   token: token,
                   message: 'User registered successfully!'
                 }
@@ -65,9 +88,16 @@ exports.signup =
       } else {
         // user role = 1
         user.setRoles([1]).then(() => {
+          temp = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            roles: 'user'
+          }
           res.status(200).json({
             data: {
-              user: user,
+              user: temp,
               token: token,
               message: "User registered successfully!"
             }
@@ -126,9 +156,21 @@ exports.signin =
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
+        for (let i = 0; i < roles.length; i++) {
+          if (typeof roles[i].name === 'string') {
+            role = roles[i].name
+          }
+        }
+        temp = {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          roles: role
+        }
         res.status(200).send({
           data: {
-            user: user,
+            user: temp,
             token: token,
             message: "Login successfully!"
           }
