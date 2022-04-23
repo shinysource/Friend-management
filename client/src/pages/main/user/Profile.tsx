@@ -78,7 +78,6 @@ const Profile = () => {
     initialValues,
     validationSchema,
     onSubmit: (values, actions) => {
-      console.log('asdadasd')
       handleConfirmModal()
       if (value) {
         dispatch(updateUser(values))
