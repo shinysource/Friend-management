@@ -9,7 +9,7 @@ const initialState: AuthState = {
     id: 0,
     username: '',
     email: '',
-    role: '',
+    roles: '',
     password: ''
   },
   errors: '',
