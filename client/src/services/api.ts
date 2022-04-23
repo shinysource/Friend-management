@@ -8,6 +8,7 @@ import {
   FriendsState,
   FriendsResult
 } from 'store/friend/types'
+import { User, UsersResult } from 'store/user/types'
 
 const createAxiosInstance = (baseURL: string, timeout: number) => {
   const instance: AxiosInstance = axios.create({
@@ -49,12 +50,17 @@ const apiService = {
   signin: (signinfo: Required<SignInfo>) =>
     gateway.post<AuthResult>('auth/signin', signinfo),
 
+  updateUser: (user: Required<User>) =>
+    gateway.put<UsersResult>('users/' + user.id, user),
+
   createFriend: (newFriend: Required<NewFriend>) =>
     gateway.post<FriendsResult>('friends/', newFriend),
   getFriend: () => gateway.get<FriendsResult>('friends'),
   getFriendByUserId: (userId: number) =>
     gateway.get<FriendsResult>('friends/' + userId),
   getFriendById: (id: number) => gateway.get<FriendsResult>('friends/id/' + id),
+  getFriendByEmail: (email: string) =>
+    gateway.get<FriendsResult>('friends/get?email=' + email),
   updateFriend: (friend: Required<Friend>) =>
     gateway.put<FriendsResult>('friends/' + friend.id, friend),
   deleteFriend: (id: number) => gateway.delete<FriendsResult>('friends/' + id)
