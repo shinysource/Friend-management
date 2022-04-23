@@ -10,6 +10,16 @@ const initialState: UsersState = {
   updated: false
 }
 
+export const getUsers = createAsyncThunk('user/getUsers', async () => {
+  try {
+    const response = await api.getUsers()
+    return response.data
+  } catch (error) {
+    const err = error as any
+    throw err.response?.data
+  }
+})
+
 export const updateUser = createAsyncThunk(
   'users/updateUser',
   async (users: Required<User>, { rejectWithValue }) => {
@@ -24,12 +34,37 @@ export const updateUser = createAsyncThunk(
   }
 )
 
+export const deleteUser = createAsyncThunk(
+  'users/deleteUser',
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await api.deleteUser(id)
+      return response.data
+    } catch (error) {
+      const err = error as any
+      throw rejectWithValue(err.response?.data)
+    }
+  }
+)
+
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {},
   extraReducers(builder): void {
     builder
+      .addCase(getUsers.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.loading = false
+        state.updated = false
+        state.users = action.payload.data.users
+      })
+      .addCase(getUsers.rejected, (state) => {
+        state.loading = false
+      })
+
       .addCase(updateUser.pending, (state) => {
         state.loading = true
       })
