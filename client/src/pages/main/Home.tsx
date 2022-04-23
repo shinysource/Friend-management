@@ -20,14 +20,10 @@ const Home = () => {
       <div>
         <Grid container alignItems="center" className="home-back">
           <Grid container justifyContent="center" alignItems="center" pt={50}>
-            <div className="text-animate-content text-4xl font-normal text-center py-2 md:py-4 lg:py-4 w-full sm:w-full md:w-full lg:w-full">
-              <div className="text-animate-content-container">
-                <ul className="text-animate-content-container-list">
-                  <li className="font-podium96 text-animate-content-container-list-item uppercase mx-auto w-[180px] sm:w-[160px] lg:w-full">
-                    Welcome to our Friend's management
-                  </li>
-                </ul>
-              </div>
+            <div className="text-4xl font-normal text-center py-2 md:py-4 lg:py-4 w-full">
+              <p className="font-podium96 uppercase mx-auto lg:w-full">
+                Welcome to our Friend's management
+              </p>
             </div>
           </Grid>
         </Grid>
