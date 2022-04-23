@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -26,6 +26,7 @@ import CustomButton from 'components/Button/CustomButton'
 import FormInput from 'components/Fields/FormInput'
 import FormSelect from 'components/Fields/FormMultiSelect'
 import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
+import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
@@ -69,6 +70,9 @@ const initialValues: FriendForm = {
 }
 
 const Edit = () => {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(false)
+
   const loaction = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -76,6 +80,10 @@ const Edit = () => {
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
   const pathnames = loaction.pathname.split('/').filter((x) => x)
+
+  const handleConfirmModal = () => {
+    setOpen(true)
+  }
 
   useEffect(() => {
     console.log(Number(pathnames.at(-1)))
@@ -102,19 +110,32 @@ const Edit = () => {
     initialValues,
     validationSchema,
     onSubmit: (values, actions) => {
-      formik.setFieldValue('acceptReceive', false)
-      dispatch(updateFriend(values))
-        .unwrap()
-        .then((resolve) => {
-          toast.success('Friend was updateded successfully')
-          navigate('/friend')
-        })
-        .catch((error) => {
-          toast.error(error.message)
-        })
-      actions.resetForm()
+      if (value) {
+        formik.setFieldValue('acceptReceive', false)
+        dispatch(updateFriend(values))
+          .unwrap()
+          .then((resolve) => {
+            toast.success('Friend was updateded successfully')
+            navigate('/friend')
+          })
+          .catch((error) => {
+            toast.error(error.message)
+          })
+        actions.resetForm()
+      } else {
+        return
+      }
     }
   })
+
+  const handleClose = (newValue?: boolean) => {
+    setOpen(false)
+
+    if (newValue) {
+      setValue(newValue)
+      formik.handleSubmit()
+    }
+  }
 
   return (
     <>
@@ -282,10 +303,11 @@ const Edit = () => {
                         </Grid>
                         <Grid item xs={4}>
                           <CustomButton
-                            type="submit"
+                            type="button"
                             model="primary"
                             variant="contained"
                             label="Update Friend"
+                            onClick={handleConfirmModal}
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />
@@ -296,6 +318,13 @@ const Edit = () => {
                 </Grid>
               </Grid>
             </Grid>
+            <ConfirmDialog
+              id="add-friend"
+              keepMounted
+              open={open}
+              onClose={handleClose}
+              value={value}
+            />
           </CardContent>
         </Card>
       </Container>

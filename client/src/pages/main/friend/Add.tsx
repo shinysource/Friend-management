@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -25,6 +26,7 @@ import CustomButton from 'components/Button/CustomButton'
 import FormInput from 'components/Fields/FormInput'
 import FormSelect from 'components/Fields/FormMultiSelect'
 import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
+import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
@@ -64,28 +66,49 @@ const initialValues: FriendForm = {
 }
 
 const Add = () => {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(false)
+
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
+  const handleConfirmModal = () => {
+    setOpen(true)
+  }
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values, actions) => {
-      formik.setFieldValue('acceptReceive', false)
-      dispatch(createFriend(values))
-        .unwrap()
-        .then((resolve) => {
-          toast.success('Friend was added successfully')
-          navigate('/friend')
-        })
-        .catch((error) => {
-          toast.error(error.message)
-        })
-      actions.resetForm()
+      handleConfirmModal()
+      if (value) {
+        formik.setFieldValue('acceptReceive', false)
+        dispatch(createFriend(values))
+          .unwrap()
+          .then((resolve) => {
+            toast.success('Friend was added successfully')
+            navigate('/friend')
+          })
+          .catch((error) => {
+            toast.error(error.message)
+          })
+        actions.resetForm()
+      } else {
+        return
+      }
     }
   })
+
+  const handleClose = (newValue?: boolean) => {
+    setOpen(false)
+
+    if (newValue) {
+      setValue(newValue)
+      formik.handleSubmit()
+    }
+  }
 
   return (
     <>
@@ -215,7 +238,6 @@ const Add = () => {
                           name="hobbies"
                           options={hobbies}
                           label="Hobby"
-                          placeholder="Select your country"
                           multiple={true}
                           formik={formik}
                           // handleChange={formik.handleChange}
@@ -257,6 +279,7 @@ const Add = () => {
                             model="primary"
                             variant="contained"
                             label="ADD Friend"
+                            // onClick={handleConfirmModal}
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />
@@ -268,6 +291,13 @@ const Add = () => {
               </Grid>
             </Grid>
           </CardContent>
+          <ConfirmDialog
+            id="add-friend"
+            keepMounted
+            open={open}
+            onClose={handleClose}
+            value={value}
+          />
         </Card>
       </Container>
     </>
