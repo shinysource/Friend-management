@@ -5,8 +5,19 @@ import { NewFriend, Friend, FriendsState, FriendsResult } from './types'
 import api from 'services/api'
 
 const initialState: FriendsState = {
-  friend: [],
-  errors: '',
+  friends: { data: [] },
+  friend: {
+    data: {
+      id: 0,
+      friendname: '',
+      email: '',
+      gender: '',
+      age: 0,
+      hobbies: '',
+      description: '',
+      userId: 0
+    }
+  },
   loading: false,
   updated: false
 }
@@ -23,6 +34,16 @@ export const createFriend = createAsyncThunk(
     }
   }
 )
+
+export const getFriends = createAsyncThunk('friend/getFriends', async () => {
+  try {
+    const response = await api.getFriends()
+    return response.data
+  } catch (error) {
+    const err = error as any
+    throw err.response?.data
+  }
+})
 
 export const getFriendByUserId = createAsyncThunk(
   'friend/getFriendByUserId',
@@ -105,17 +126,31 @@ export const friendSlice = createSlice({
       .addCase(createFriend.rejected, (state, action) => {
         state.loading = false
       })
+
+      .addCase(getFriends.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(getFriends.fulfilled, (state, action) => {
+        state.loading = false
+        state.updated = false
+        state.friends.data = action.payload.data.friends
+      })
+      .addCase(getFriends.rejected, (state) => {
+        state.loading = false
+      })
+
       .addCase(getFriendByUserId.pending, (state) => {
         state.loading = true
       })
       .addCase(getFriendByUserId.fulfilled, (state, action) => {
         state.loading = false
         state.updated = false
-        state.friend = action.payload.data.friend
+        state.friends.data = action.payload.data.friends
       })
       .addCase(getFriendByUserId.rejected, (state) => {
         state.loading = false
       })
+
       .addCase(getFriendById.rejected, (state) => {
         state.loading = false
       })
@@ -125,8 +160,9 @@ export const friendSlice = createSlice({
       .addCase(getFriendById.fulfilled, (state, action) => {
         state.loading = false
         state.updated = false
-        state.friend = action.payload.data.friend
+        state.friend.data = action.payload.data.friend
       })
+
       .addCase(getFriendByEmail.rejected, (state) => {
         state.loading = false
       })
@@ -136,8 +172,9 @@ export const friendSlice = createSlice({
       .addCase(getFriendByEmail.fulfilled, (state, action) => {
         state.loading = false
         state.updated = false
-        state.friend = action.payload.data.friend
+        state.friends.data = action.payload.data.friends
       })
+
       .addCase(updateFriend.pending, (state) => {
         state.loading = true
       })
@@ -148,6 +185,7 @@ export const friendSlice = createSlice({
       .addCase(updateFriend.rejected, (state) => {
         state.loading = false
       })
+
       .addCase(deleteFriend.pending, (state) => {
         state.loading = true
       })

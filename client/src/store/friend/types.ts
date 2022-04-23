@@ -18,23 +18,34 @@ export interface Friend {
   userId: number
 }
 
+// export interface FriendsState {
+//   friend: Friend[]
+//   errors?: string
+//   loading: boolean
+//   updated: boolean
+// }
+
 export interface FriendsState {
-  friend: Friend[]
-  errors?: string
+  friends: {
+    data: Friend[]
+  }
+  friend: {
+    data: Friend
+  }
   loading: boolean
   updated: boolean
 }
 
 export interface FriendsResult {
   data: {
-    friend: Friend[]
+    friends: Friend[]
     message: string
   }
 }
 
-// export interface FriendResult {
-//   data: {
-//     friend: Friend
-//     message: string
-//   }
-// }
+export interface FriendResult {
+  data: {
+    friend: Friend
+    message: string
+  }
+}

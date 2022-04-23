@@ -37,7 +37,7 @@ const Friend = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
-  const { friend, loading, updated } = useAppSelector(
+  const { friend, friends, loading, updated } = useAppSelector(
     (state: RootState) => state.friend
   )
 
@@ -157,7 +157,7 @@ const Friend = () => {
                   {...friend}
                   pageSize={5}
                   rowsPerPageOptions={[5]}
-                  rows={friend}
+                  rows={friends.data}
                   columns={columns}
                   loading={loading}
                 />

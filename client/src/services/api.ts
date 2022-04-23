@@ -6,7 +6,8 @@ import {
   NewFriend,
   Friend,
   FriendsState,
-  FriendsResult
+  FriendsResult,
+  FriendResult
 } from 'store/friend/types'
 import { User, UsersResult } from 'store/user/types'
 
@@ -50,15 +51,17 @@ const apiService = {
   signin: (signinfo: Required<SignInfo>) =>
     gateway.post<AuthResult>('auth/signin', signinfo),
 
+  getUsers: () => gateway.get<UsersResult>('users/'),
   updateUser: (user: Required<User>) =>
     gateway.put<UsersResult>('users/' + user.id, user),
+  deleteUser: (id: number) => gateway.delete<UsersResult>('users/' + id),
 
   createFriend: (newFriend: Required<NewFriend>) =>
     gateway.post<FriendsResult>('friends/', newFriend),
-  getFriend: () => gateway.get<FriendsResult>('friends'),
+  getFriends: () => gateway.get<FriendsResult>('friends'),
   getFriendByUserId: (userId: number) =>
     gateway.get<FriendsResult>('friends/' + userId),
-  getFriendById: (id: number) => gateway.get<FriendsResult>('friends/id/' + id),
+  getFriendById: (id: number) => gateway.get<FriendResult>('friends/id/' + id),
   getFriendByEmail: (email: string) =>
     gateway.get<FriendsResult>('friends/get?email=' + email),
   updateFriend: (friend: Required<Friend>) =>

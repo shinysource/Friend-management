@@ -58,7 +58,7 @@ interface FriendForm {
   userId: number
 }
 
-const initialValues: FriendForm = {
+let initialValues: FriendForm = {
   id: 0,
   friendname: '',
   email: '',
@@ -86,23 +86,33 @@ const Edit = () => {
   }
 
   useEffect(() => {
-    console.log(Number(pathnames.at(-1)))
     dispatch(getFriendById(Number(pathnames.at(-1))))
       .unwrap()
-      .then((resolve) => {})
+      .then((resolve) => {
+        initialValues = {
+          id: friend.data.id,
+          friendname: friend.data.friendname,
+          email: friend.data.email,
+          gender: friend.data.gender,
+          age: 0,
+          hobbies: friend.data.hobbies,
+          description: friend.data.description,
+          userId: 0
+        }
+      })
       .catch((error) => {
         toast.error(error.message)
       })
-  }, [dispatch])
+  }, [])
 
-  const initialValues: FriendForm = {
-    id: 0,
-    friendname: '',
-    email: '',
-    gender: '',
+  initialValues = {
+    id: friend.data.id,
+    friendname: friend.data.friendname,
+    email: friend.data.email,
+    gender: friend.data.gender,
     age: 0,
-    hobbies: '',
-    description: '',
+    hobbies: friend.data.hobbies,
+    description: friend.data.description,
     userId: 0
   }
 
