@@ -19,14 +19,22 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
 import { setChecked, verify, signout } from 'store/auth'
 
-const pages = ['Friend']
-const settings = ['Profile']
+// let pages = ['Friend']
+// let settings = ['Profile']
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const { user } = useAppSelector((state: RootState) => state.auth)
+
+  let pages = ['Friend']
+  let settings = ['Profile']
+  if (user.roles === 'admin') {
+    pages = ['Friend', 'User']
+    settings = ['Profile']
+  }
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
