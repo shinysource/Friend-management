@@ -50,6 +50,19 @@ export const getFriendById = createAsyncThunk(
   }
 )
 
+export const getFriendByEmail = createAsyncThunk(
+  'friend/getFriendByEmail',
+  async (email: string) => {
+    try {
+      const response = await api.getFriendByEmail(email)
+      return response.data
+    } catch (error) {
+      const err = error as any
+      throw err.response?.data
+    }
+  }
+)
+
 export const updateFriend = createAsyncThunk(
   'friend/updateFriend',
   async (friend: Required<Friend>, { rejectWithValue }) => {
@@ -100,6 +113,9 @@ export const friendSlice = createSlice({
         state.updated = false
         state.friend = action.payload.data.friend
       })
+      .addCase(getFriendByUserId.rejected, (state) => {
+        state.loading = false
+      })
       .addCase(getFriendById.rejected, (state) => {
         state.loading = false
       })
@@ -111,8 +127,16 @@ export const friendSlice = createSlice({
         state.updated = false
         state.friend = action.payload.data.friend
       })
-      .addCase(getFriendByUserId.rejected, (state) => {
+      .addCase(getFriendByEmail.rejected, (state) => {
         state.loading = false
+      })
+      .addCase(getFriendByEmail.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(getFriendByEmail.fulfilled, (state, action) => {
+        state.loading = false
+        state.updated = false
+        state.friend = action.payload.data.friend
       })
       .addCase(updateFriend.pending, (state) => {
         state.loading = true
