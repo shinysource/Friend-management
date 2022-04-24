@@ -18,7 +18,6 @@ import {
 import Divider from '@mui/material/Divider'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import { deepOrange, green } from '@mui/material/colors'
 
@@ -279,7 +278,6 @@ const Add = () => {
                             model="primary"
                             variant="contained"
                             label="ADD Friend"
-                            // onClick={handleConfirmModal}
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />

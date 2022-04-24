@@ -18,7 +18,6 @@ import {
 import Divider from '@mui/material/Divider'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import { deepOrange, green } from '@mui/material/colors'
 
@@ -58,7 +57,7 @@ interface FriendForm {
   userId: number
 }
 
-let initialValues: FriendForm = {
+const initialValues: FriendForm = {
   id: 0,
   friendname: '',
   email: '',
@@ -88,38 +87,17 @@ const Edit = () => {
   useEffect(() => {
     dispatch(getFriendById(Number(pathnames.at(-1))))
       .unwrap()
-      .then((resolve) => {
-        initialValues = {
-          id: friend.data.id,
-          friendname: friend.data.friendname,
-          email: friend.data.email,
-          gender: friend.data.gender,
-          age: 0,
-          hobbies: friend.data.hobbies,
-          description: friend.data.description,
-          userId: 0
-        }
-      })
+      .then((resolve) => {})
       .catch((error) => {
         toast.error(error.message)
       })
   }, [])
 
-  initialValues = {
-    id: friend.data.id,
-    friendname: friend.data.friendname,
-    email: friend.data.email,
-    gender: friend.data.gender,
-    age: 0,
-    hobbies: friend.data.hobbies,
-    description: friend.data.description,
-    userId: 0
-  }
-
   const formik = useFormik({
-    initialValues,
+    initialValues: friend.data ?? {},
     validationSchema,
     onSubmit: (values, actions) => {
+      handleConfirmModal()
       if (value) {
         formik.setFieldValue('acceptReceive', false)
         dispatch(updateFriend(values))
@@ -137,6 +115,10 @@ const Edit = () => {
       }
     }
   })
+
+  useEffect(() => {
+    formik.setValues(friend.data)
+  }, [friend.data, formik.setValues])
 
   const handleClose = (newValue?: boolean) => {
     setOpen(false)
@@ -166,7 +148,7 @@ const Edit = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Avatar
-                      alt={user.username}
+                      alt={friend.data.friendname}
                       src="/broken-image.jpg"
                       sx={{
                         bgcolor: green[500],
@@ -313,11 +295,10 @@ const Edit = () => {
                         </Grid>
                         <Grid item xs={4}>
                           <CustomButton
-                            type="button"
+                            type="submit"
                             model="primary"
                             variant="contained"
                             label="Update Friend"
-                            onClick={handleConfirmModal}
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />
