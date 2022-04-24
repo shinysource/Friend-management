@@ -11,8 +11,8 @@ import Profile from 'pages/main/user/Profile'
 import AddAdminFriendPage from 'pages/main/admin/friend/Add'
 import EditAdminFriendPage from 'pages/main/admin/friend/Edit'
 import AdminFriendPage from 'pages/main/admin/friend/Friend'
-// import AddAdminFriendPage from 'pages/main/admin/user/Add'
-// import EditAdminFriendPage from 'pages/main/admin/user/Edit'
+import AddAdminUserPage from 'pages/main/admin/user/Add'
+import EditAdminUserPage from 'pages/main/admin/user/Edit'
 import AdminUserPage from 'pages/main/admin/user/User'
 import AdminProfile from 'pages/main/admin/user/Profile'
 
@@ -34,8 +34,8 @@ const Main = () => {
         <Route path="profile" element={<AdminProfile />}></Route>
 
         <Route path="user" element={<AdminUserPage />}></Route>
-        {/* <Route path="user/add" element={<AddAdminUserPage />} />
-        <Route path="user/edit/*" element={<EditAdminUserPage />}></Route> */}
+        <Route path="user/add" element={<AddAdminUserPage />} />
+        <Route path="user/edit/*" element={<EditAdminUserPage />}></Route>
 
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
