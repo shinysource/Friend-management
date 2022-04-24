@@ -18,7 +18,6 @@ import {
 import Divider from '@mui/material/Divider'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import { deepOrange, green } from '@mui/material/colors'
 
@@ -31,6 +30,7 @@ import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
 import { getFriendById, updateFriend } from 'store/friend'
+import { getUsers } from 'store/user'
 
 import Header from 'layout/Header'
 
@@ -58,17 +58,6 @@ interface FriendForm {
   userId: number
 }
 
-let initialValues: FriendForm = {
-  id: 0,
-  friendname: '',
-  email: '',
-  gender: '',
-  age: 0,
-  hobbies: '',
-  description: '',
-  userId: 0
-}
-
 const Edit = () => {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(false)
@@ -77,51 +66,36 @@ const Edit = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
+  const { users } = useAppSelector((state: RootState) => state.user)
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
   const pathnames = loaction.pathname.split('/').filter((x) => x)
 
-  const handleConfirmModal = () => {
-    setOpen(true)
-  }
-
   useEffect(() => {
     dispatch(getFriendById(Number(pathnames.at(-1))))
       .unwrap()
-      .then((resolve) => {
-        initialValues = {
-          id: friend.data.id,
-          friendname: friend.data.friendname,
-          email: friend.data.email,
-          gender: friend.data.gender,
-          age: 0,
-          hobbies: friend.data.hobbies,
-          description: friend.data.description,
-          userId: 0
-        }
+      .then((resolve) => {})
+      .catch((error) => {
+        toast.error(error.message)
       })
+    dispatch(getUsers())
+      .unwrap()
+      .then((resolve) => {})
       .catch((error) => {
         toast.error(error.message)
       })
   }, [])
 
-  initialValues = {
-    id: friend.data.id,
-    friendname: friend.data.friendname,
-    email: friend.data.email,
-    gender: friend.data.gender,
-    age: 0,
-    hobbies: friend.data.hobbies,
-    description: friend.data.description,
-    userId: 0
+  const handleConfirmModal = () => {
+    setOpen(true)
   }
 
   const formik = useFormik({
-    initialValues,
+    initialValues: friend.data ?? {},
     validationSchema,
     onSubmit: (values, actions) => {
+      handleConfirmModal()
       if (value) {
-        formik.setFieldValue('acceptReceive', false)
         dispatch(updateFriend(values))
           .unwrap()
           .then((resolve) => {
@@ -137,6 +111,10 @@ const Edit = () => {
       }
     }
   })
+
+  useEffect(() => {
+    formik.setValues(friend.data)
+  }, [friend.data, formik.setValues])
 
   const handleClose = (newValue?: boolean) => {
     setOpen(false)
@@ -166,7 +144,7 @@ const Edit = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Avatar
-                      alt={user.username}
+                      alt={friend.data.friendname}
                       src="/broken-image.jpg"
                       sx={{
                         bgcolor: green[500],
@@ -189,7 +167,15 @@ const Edit = () => {
               >
                 <Grid item xs={12}>
                   <div className="flex justify-center">
-                    <p className="font-podium49 text-4xl uppercase text-grey">{`${user.username}`}</p>
+                    <p className="font-podium49 text-4xl uppercase text-grey">
+                      {users.data.map((value, key) => {
+                        for (let i = 0; i < users.data.length; i++) {
+                          if (value.id === friend.data.userId) {
+                            return value.username
+                          }
+                        }
+                      })}
+                    </p>
                     <p className="font-podium49 text-4xl uppercase">
                       's Friend
                     </p>
@@ -313,11 +299,10 @@ const Edit = () => {
                         </Grid>
                         <Grid item xs={4}>
                           <CustomButton
-                            type="button"
+                            type="submit"
                             model="primary"
                             variant="contained"
                             label="Update Friend"
-                            onClick={handleConfirmModal}
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />
