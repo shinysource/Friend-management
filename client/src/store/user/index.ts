@@ -5,7 +5,15 @@ import { User, UsersState } from './types'
 import api from 'services/api'
 
 const initialState: UsersState = {
-  users: [],
+  users: { data: [] },
+  user: {
+    data: {
+      id: 0,
+      username: '',
+      email: '',
+      password: ''
+    }
+  },
   loading: false,
   updated: false
 }
@@ -19,6 +27,30 @@ export const getUsers = createAsyncThunk('user/getUsers', async () => {
     throw err.response?.data
   }
 })
+
+export const getUser = createAsyncThunk('user/getUser', async (id: number) => {
+  try {
+    const response = await api.getUser(id)
+    return response.data
+  } catch (error) {
+    const err = error as any
+    throw err.response?.data
+  }
+})
+
+export const createUser = createAsyncThunk(
+  'users/createUser',
+  async (users: Required<User>, { rejectWithValue }) => {
+    try {
+      const response = await api.createUser(users)
+      return response.data
+    } catch (error) {
+      console.log('error: ', error)
+      const err = error as any
+      throw rejectWithValue(err.response?.data)
+    }
+  }
+)
 
 export const updateUser = createAsyncThunk(
   'users/updateUser',
@@ -59,9 +91,32 @@ export const usersSlice = createSlice({
       .addCase(getUsers.fulfilled, (state, action) => {
         state.loading = false
         state.updated = false
-        state.users = action.payload.data.users
+        state.users.data = action.payload.data.users
       })
       .addCase(getUsers.rejected, (state) => {
+        state.loading = false
+      })
+
+      .addCase(getUser.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false
+        state.updated = false
+        state.user.data = action.payload.data.user
+      })
+      .addCase(getUser.rejected, (state) => {
+        state.loading = false
+      })
+
+      .addCase(createUser.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.loading = false
+        state.updated = true
+      })
+      .addCase(createUser.rejected, (state) => {
         state.loading = false
       })
 
@@ -73,6 +128,17 @@ export const usersSlice = createSlice({
         state.updated = true
       })
       .addCase(updateUser.rejected, (state) => {
+        state.loading = false
+      })
+
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false
+        state.updated = true
+      })
+      .addCase(deleteUser.rejected, (state) => {
         state.loading = false
       })
   }

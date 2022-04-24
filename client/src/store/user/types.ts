@@ -6,7 +6,12 @@ export interface User {
 }
 
 export interface UsersState {
-  users: User[]
+  users: {
+    data: User[]
+  }
+  user: {
+    data: User
+  }
   loading: boolean
   updated: boolean
 }
@@ -14,6 +19,13 @@ export interface UsersState {
 export interface UsersResult {
   data: {
     users: User[]
+    message: string
+  }
+}
+
+export interface UserResult {
+  data: {
+    user: User
     message: string
   }
 }

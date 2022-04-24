@@ -9,7 +9,7 @@ import {
   FriendsResult,
   FriendResult
 } from 'store/friend/types'
-import { User, UsersResult } from 'store/user/types'
+import { User, UsersResult, UserResult } from 'store/user/types'
 
 const createAxiosInstance = (baseURL: string, timeout: number) => {
   const instance: AxiosInstance = axios.create({
@@ -52,6 +52,9 @@ const apiService = {
     gateway.post<AuthResult>('auth/signin', signinfo),
 
   getUsers: () => gateway.get<UsersResult>('users/'),
+  getUser: (id: number) => gateway.get<UserResult>('users/' + id),
+  createUser: (user: Required<User>) =>
+    gateway.post<UsersResult>('users/', user),
   updateUser: (user: Required<User>) =>
     gateway.put<UsersResult>('users/' + user.id, user),
   deleteUser: (id: number) => gateway.delete<UsersResult>('users/' + id),
