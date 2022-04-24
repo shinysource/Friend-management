@@ -18,7 +18,6 @@ import {
 import Divider from '@mui/material/Divider'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import { deepOrange, green } from '@mui/material/colors'
 
@@ -35,7 +34,7 @@ import { updateUser } from 'store/user'
 import Header from 'layout/Header'
 
 const validationSchema = Yup.object().shape({
-  friendname: Yup.string().required('Enter your username'),
+  username: Yup.string().required('Enter your username'),
   email: Yup.string().required('Enter your Email').email('Enter a valid Email'),
   password: Yup.string().required('Enter your password'),
   password_conf: Yup.string().oneOf(
@@ -101,6 +100,7 @@ const Profile = () => {
 
     if (newValue) {
       setValue(newValue)
+      console.log('asdfasdf')
       formik.handleSubmit()
     }
   }
@@ -239,7 +239,6 @@ const Profile = () => {
                             model="primary"
                             variant="contained"
                             label="Update Profile"
-                            // onClick={handleConfirmModal}
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />
