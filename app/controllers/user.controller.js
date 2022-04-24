@@ -1,7 +1,78 @@
 var bcrypt = require("bcryptjs");
 const db = require("../models");
+const { check, validationResult } = require('express-validator');
+
 const User = db.user;
 const Op = db.Sequelize.Op;
+
+exports.create =
+[
+  check('username', 'Username is required').not().isEmpty(),
+  check('email', 'Email is required').not().isEmpty().isEmail(),
+  check('password', 'Password is required').not().isEmpty(),
+  (req, res) => {
+  const errors = validationResult(req);
+
+  // If some error occurs, then this
+  // block of code will run
+  if (!errors.isEmpty()) {
+      res.json(errors)
+  }
+  
+  // Save User to Database
+  User.create({
+    username: req.body.username,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8)
+  })
+    .then(user => {
+
+      if (req.body.roles) {
+        Role.findAll({
+          where: {
+            name: req.body.roles
+          }
+        }).then(roles => {
+          user.setRoles(roles).then(() => {
+            temp = {
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              password: user.password,
+              roles: req.body.roles
+            }
+            res.status(200).json(
+              {
+                data: {
+                  user: temp,
+                  message: 'User created successfully!'
+                }
+              });
+          });
+        });
+      } else {
+        // user role = 1
+        user.setRoles([1]).then(() => {
+          temp = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            roles: 'user'
+          }
+          res.status(200).json({
+            data: {
+              user: temp,
+              message: "User created successfully!"
+            }
+          });
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ data: { message: err.message }});
+    });
+}];
 
 exports.findAll = (req, res) => {
   // const username = req.query.username

@@ -1,4 +1,5 @@
-const { authJwt } = require("../middleware");
+const { verifySignUp, authJwt } = require("../middleware");
+
 const controller = require("../controllers/user.controller");
 
 module.exports = function(app) {
@@ -9,6 +10,14 @@ module.exports = function(app) {
     );
     next();
   });
+
+  app.post(
+    "/api/users/",
+    verifySignUp.checkDuplicateUsernameOrEmail,
+    verifySignUp.checkRolesExisted,
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.create
+  );
 
   app.get(
     "/api/users/",
