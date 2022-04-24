@@ -12,7 +12,6 @@ import {
   GridActionsCellItem
 } from '@mui/x-data-grid'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import PlusOneIcon from '@mui/icons-material/PlusOne'
 import EditIcon from '@mui/icons-material/Edit'
@@ -104,16 +103,12 @@ const User = () => {
 
         <Grid pt={2}></Grid>
         <Card>
-          <CardHeader>
-            <Grid item xs={12}>
-              <div className="flex justify-center">
-                <p className="font-podium49 text-4xl uppercase text-grey">{`${user.username}`}</p>
-                <p className="font-podium49 text-4xl uppercase">
-                  's New Friend
-                </p>
-              </div>
-            </Grid>
-          </CardHeader>
+          <Grid item xs={12}>
+            <div className="flex justify-center">
+              <p className="font-podium49 text-4xl uppercase text-grey">{`${user.username}`}</p>
+              <p className="font-podium49 text-4xl uppercase">'s New Friend</p>
+            </div>
+          </Grid>
           <CardContent>
             <Grid item container sm={12} lg={12} justifyContent="space-between">
               <Grid item xs={2}>
@@ -135,7 +130,7 @@ const User = () => {
                   {...users}
                   pageSize={5}
                   rowsPerPageOptions={[5]}
-                  rows={users}
+                  rows={users.data}
                   columns={columns}
                   loading={loading}
                 />

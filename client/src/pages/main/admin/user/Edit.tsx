@@ -29,7 +29,7 @@ import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
-import { updateUser } from 'store/user'
+import { updateUser, getUser } from 'store/user'
 
 import Header from 'layout/Header'
 
@@ -51,20 +51,32 @@ interface userForm {
   password_conf: string
 }
 
-const Profile = () => {
+const Edit = () => {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(false)
 
   const loaction = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { user } = useAppSelector((state: RootState) => state.auth)
+  // const { user } = useAppSelector((state: RootState) => state.auth)
+  const { user } = useAppSelector((state: RootState) => state.user)
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
+  const pathnames = loaction.pathname.split('/').filter((x) => x)
+
+  useEffect(() => {
+    dispatch(getUser(Number(pathnames.at(-1))))
+      .unwrap()
+      .then((resolve) => {})
+      .catch((error) => {
+        toast.error(error.message)
+      })
+  }, [])
+
   const initialValues: userForm = {
-    id: user.id,
-    username: user.username,
-    email: user.email,
+    id: user.data.id,
+    username: user.data.username,
+    email: user.data.email,
     password: '',
     password_conf: ''
   }
@@ -123,7 +135,7 @@ const Profile = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Avatar
-                      alt={user.username}
+                      alt={user.data.username}
                       src="/broken-image.jpg"
                       sx={{
                         bgcolor: green[500],
@@ -262,4 +274,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default Edit

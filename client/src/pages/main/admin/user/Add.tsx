@@ -29,7 +29,7 @@ import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
-import { updateUser } from 'store/user'
+import { createUser } from 'store/user'
 
 import Header from 'layout/Header'
 
@@ -51,6 +51,14 @@ interface userForm {
   password_conf: string
 }
 
+const initialValues: userForm = {
+  id: 0,
+  username: '',
+  email: '',
+  password: '',
+  password_conf: ''
+}
+
 const Profile = () => {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(false)
@@ -60,14 +68,6 @@ const Profile = () => {
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
-
-  const initialValues: userForm = {
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    password: '',
-    password_conf: ''
-  }
 
   const handleConfirmModal = () => {
     setOpen(true)
@@ -79,10 +79,10 @@ const Profile = () => {
     onSubmit: (values, actions) => {
       handleConfirmModal()
       if (value) {
-        dispatch(updateUser(values))
+        dispatch(createUser(values))
           .unwrap()
           .then((resolve) => {
-            toast.success('User was updateded successfully')
+            toast.success('User was created successfully')
             navigate('/user')
           })
           .catch((error) => {
@@ -146,11 +146,8 @@ const Profile = () => {
               >
                 <Grid item xs={12}>
                   <div className="flex justify-center">
-                    <p className="font-podium49 text-4xl uppercase text-grey">
-                      my
-                    </p>
                     <p className="font-podium49 text-4xl uppercase">
-                      &nbsp;profile
+                      Add profile
                     </p>
                   </div>
                 </Grid>
@@ -237,7 +234,7 @@ const Profile = () => {
                             type="submit"
                             model="primary"
                             variant="contained"
-                            label="Update Profile"
+                            label="Create Profile"
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />
