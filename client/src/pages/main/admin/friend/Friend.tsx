@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -20,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import CustomButton from 'components/Button/CustomButton'
 import FormInput from 'components/Fields/FormInput'
 import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
+import DeleteConfirmDialog from 'components/Dialog/DeleteConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
@@ -34,6 +35,8 @@ import {
 import Header from 'layout/Header'
 
 const Friend = () => {
+  const [deletingId, setDeletingId] = useState<number | null>(null)
+
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
@@ -41,19 +44,23 @@ const Friend = () => {
     (state: RootState) => state.friend
   )
 
-  const handleDelete = React.useCallback(
-    async (id: number) => {
-      dispatch(deleteFriend(id))
-        .unwrap()
-        .then((resolve) => {
-          toast.success(resolve.data.message)
-        })
-        .catch((error) => {
-          toast.error(error.message)
-        })
-    },
-    [dispatch]
-  )
+  const handleShowDelete = (id: number) => {
+    setDeletingId(id)
+  }
+
+  const handleConfirmDelete = () => {
+    if (!deletingId) return
+
+    dispatch(deleteFriend(deletingId))
+      .unwrap()
+      .then((resolve) => {
+        toast.success(resolve.data.message)
+      })
+      .catch((error) => {
+        toast.error(error.message)
+      })
+    setDeletingId(null)
+  }
 
   const handleEdit = (id: number) => {
     navigate('/friend/edit/' + id)
@@ -97,7 +104,7 @@ const Friend = () => {
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleShowDelete(params.row.id)}
             color="inherit"
           />
         </>
@@ -148,6 +155,11 @@ const Friend = () => {
             <Grid container py={2} spacing={3}>
               <Grid item xs={12}>
                 <DataGrid
+                  components={{
+                    NoRowsOverlay: () => (
+                      <p className="flex justify-center py-9">No Friends</p>
+                    )
+                  }}
                   autoHeight
                   {...friend}
                   pageSize={5}
@@ -159,6 +171,13 @@ const Friend = () => {
               </Grid>
             </Grid>
           </CardContent>
+          <DeleteConfirmDialog
+            id="delete-admin-friend"
+            keepMounted
+            open={!!deletingId}
+            onClose={() => setDeletingId(null)}
+            onConfirm={handleConfirmDelete}
+          />
         </Card>
       </Container>
     </>
