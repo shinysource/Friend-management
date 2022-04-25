@@ -69,6 +69,7 @@ const Edit = () => {
       .unwrap()
       .then((resolve) => {})
       .catch((error) => {
+        handleClose()
         toast.error(error.message)
       })
   }, [])
@@ -106,6 +107,14 @@ const Edit = () => {
       }
     }
   })
+
+  useEffect(() => {
+    formik.setFieldValue('id', user.data.id)
+    formik.setFieldValue('username', user.data.username)
+    formik.setFieldValue('email', user.data.email)
+    formik.setFieldValue('password', '')
+    formik.setFieldValue('password_conf', '')
+  }, [user.data, formik.setFieldValue])
 
   const handleClose = (newValue?: boolean) => {
     setOpen(false)
@@ -159,7 +168,7 @@ const Edit = () => {
                 <Grid item xs={12}>
                   <div className="flex justify-center">
                     <p className="font-podium49 text-4xl uppercase text-grey">
-                      my
+                      User's
                     </p>
                     <p className="font-podium49 text-4xl uppercase">
                       &nbsp;profile
@@ -230,7 +239,7 @@ const Edit = () => {
 
                       <Grid item container justifyContent="space-between">
                         <Grid item xs={4}>
-                          <Link to="/friend">
+                          <Link to="/user">
                             <CustomButton
                               type="button"
                               model="primary"

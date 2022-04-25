@@ -107,6 +107,7 @@ const Edit = () => {
             navigate('/friend')
           })
           .catch((error) => {
+            handleClose()
             toast.error(error.message)
           })
         actions.resetForm()

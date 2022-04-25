@@ -82,6 +82,7 @@ const Edit = () => {
       .unwrap()
       .then((resolve) => {})
       .catch((error) => {
+        handleClose()
         toast.error(error.message)
       })
   }, [])

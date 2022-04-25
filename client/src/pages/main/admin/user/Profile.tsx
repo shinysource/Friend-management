@@ -86,6 +86,7 @@ const Profile = () => {
             navigate('/user')
           })
           .catch((error) => {
+            handleClose()
             toast.error(error.message)
           })
         actions.resetForm()
