@@ -14,11 +14,11 @@ backend - [NodeJS] + [REST api] with [Express], [Sequelize] & [MySQL].
 - [Eslint](https://eslint.org)
 - [Prettier](https://prettier.io)
 - [Docker](https://www.docker.com)
-- [NodeJS]
-- [Express]
-- [REST api]
-- [Sequelize]
-- [MySQL]
+- [NodeJS](https://nodejs.dev)
+- [Express](https://expressjs.com)
+- [REST api](https://restfulapi.net)
+- [Sequelize](https://sequelize.org)
+- [MySQL](https://www.mysql.com/)
 
 ## Getting Started
 
