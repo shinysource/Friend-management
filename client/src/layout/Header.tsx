@@ -94,13 +94,15 @@ const Header = () => {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={`/${page.toLowerCase()}`}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </Link>
-                </MenuItem>
-              ))}
+              {pages.map((page) => {
+                return (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Link to={`/${page.toLowerCase()}`}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </Link>
+                  </MenuItem>
+                )
+              })}
             </Menu>
           </Box>
 
@@ -114,9 +116,8 @@ const Header = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page, index) => (
-              <Link to={`/${page.toLowerCase()}`}>
+              <Link to={`/${page.toLowerCase()}`} key={page}>
                 <Button
-                  key={index}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
