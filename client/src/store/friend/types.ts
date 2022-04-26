@@ -16,14 +16,8 @@ export interface Friend {
   hobbies: string
   description: string
   userId: number
+  userName?: string
 }
-
-// export interface FriendsState {
-//   friend: Friend[]
-//   errors?: string
-//   loading: boolean
-//   updated: boolean
-// }
 
 export interface FriendsState {
   friends: {

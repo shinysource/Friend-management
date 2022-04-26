@@ -45,19 +45,6 @@ export const getFriends = createAsyncThunk('friend/getFriends', async () => {
   }
 })
 
-export const getFriendByUserId = createAsyncThunk(
-  'friend/getFriendByUserId',
-  async (userId: number) => {
-    try {
-      const response = await api.getFriendByUserId(userId)
-      return response.data
-    } catch (error) {
-      const err = error as any
-      throw err.response?.data
-    }
-  }
-)
-
 export const getFriendById = createAsyncThunk(
   'friend/getFriendById',
   async (id: number) => {
@@ -136,18 +123,6 @@ export const friendSlice = createSlice({
         state.friends.data = action.payload.data.friends
       })
       .addCase(getFriends.rejected, (state) => {
-        state.loading = false
-      })
-
-      .addCase(getFriendByUserId.pending, (state) => {
-        state.loading = true
-      })
-      .addCase(getFriendByUserId.fulfilled, (state, action) => {
-        state.loading = false
-        state.updated = false
-        state.friends.data = action.payload.data.friends
-      })
-      .addCase(getFriendByUserId.rejected, (state) => {
         state.loading = false
       })
 

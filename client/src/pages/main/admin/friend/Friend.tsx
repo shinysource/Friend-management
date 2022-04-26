@@ -25,12 +25,12 @@ import DeleteConfirmDialog from 'components/Dialog/DeleteConfirmDialog'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
 import {
-  getFriendByUserId,
   getFriends,
   updateFriend,
   deleteFriend,
   getFriendByEmail
 } from 'store/friend'
+import { getUsers } from 'store/user'
 
 import Header from 'layout/Header'
 
@@ -43,6 +43,7 @@ const Friend = () => {
   const { friend, friends, loading, updated } = useAppSelector(
     (state: RootState) => state.friend
   )
+  const { users } = useAppSelector((state: RootState) => state.user)
 
   const handleShowDelete = (id: number) => {
     setDeletingId(id)
@@ -68,9 +69,9 @@ const Friend = () => {
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'Id', flex: 1 },
-    { field: 'friendname', headerName: 'Name', flex: 2 },
-    { field: 'email', headerName: 'Email', flex: 3 },
-    { field: 'gender', headerName: 'Gender', flex: 1 },
+    { field: 'friendname', headerName: 'Name', flex: 3 },
+    { field: 'email', headerName: 'Email', flex: 4 },
+    { field: 'gender', headerName: 'Gender', flex: 2 },
     {
       field: 'age',
       headerName: 'Age',
@@ -78,13 +79,8 @@ const Friend = () => {
       flex: 1
     },
     {
-      field: 'hobbies',
-      headerName: 'Hobbies',
-      flex: 4
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
+      field: 'userId',
+      headerName: 'User',
       flex: 4
     },
     {
@@ -114,6 +110,12 @@ const Friend = () => {
 
   useEffect(() => {
     dispatch(getFriends())
+      .unwrap()
+      .then((resolve) => {})
+      .catch((error) => {
+        console.log(error)
+      })
+    dispatch(getUsers())
       .unwrap()
       .then((resolve) => {})
       .catch((error) => {

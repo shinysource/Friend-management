@@ -25,7 +25,7 @@ import DeleteConfirmDialog from 'components/Dialog/DeleteConfirmDialog'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { RootState } from '../../../store/store'
 import {
-  getFriendByUserId,
+  getFriends,
   updateFriend,
   deleteFriend,
   getFriendByEmail
@@ -126,7 +126,7 @@ const Friend = () => {
   ]
 
   useEffect(() => {
-    dispatch(getFriendByUserId(user.id))
+    dispatch(getFriends())
       .unwrap()
       .then((resolve) => {})
       .catch((error) => {
