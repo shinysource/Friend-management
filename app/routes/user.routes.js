@@ -1,4 +1,4 @@
-const { verifySignUp, authJwt } = require("../middleware");
+const { user, authJwt } = require("../middleware");
 
 const controller = require("../controllers/user.controller");
 
@@ -13,8 +13,8 @@ module.exports = function(app) {
 
   app.post(
     "/api/users/",
-    verifySignUp.checkDuplicateUsernameOrEmail,
-    verifySignUp.checkRolesExisted,
+    user.checkDuplicateUsernameOrEmail,
+    user.checkRolesExisted,
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.create
   );
@@ -42,11 +42,4 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     controller.delete
   );
-
-  app.delete(
-    "/api/users/",
-    [authJwt.verifyToken, isAdmin],
-    controller.deleteAll
-  );
-
 };

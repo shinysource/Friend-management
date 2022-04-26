@@ -18,18 +18,12 @@ module.exports = function(app) {
 
   app.get(
     "/api/friends/",
-    [authJwt.verifyToken, isAdmin],
+    [authJwt.verifyToken],
     controller.findAll
   )
 
   app.get(
-    "/api/friends/:userId",
-    [authJwt.verifyToken],
-    controller.findByUserId
-  );
-
-  app.get(
-    "/api/friends/id/:id",
+    "/api/friends/:id",
     [authJwt.verifyToken],
     controller.findOne
   );
@@ -45,11 +39,4 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     controller.delete
   );
-
-  app.delete(
-    "/api/friends/",
-    [authJwt.verifyToken, isAdmin],
-    controller.deleteAll
-  );
-
 };
