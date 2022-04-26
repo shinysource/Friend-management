@@ -61,10 +61,8 @@ const apiService = {
 
   createFriend: (newFriend: Required<NewFriend>) =>
     gateway.post<FriendsResult>('friends/', newFriend),
-  getFriends: () => gateway.get<FriendsResult>('friends'),
-  getFriendByUserId: (userId: number) =>
-    gateway.get<FriendsResult>('friends/' + userId),
-  getFriendById: (id: number) => gateway.get<FriendResult>('friends/id/' + id),
+  getFriends: () => gateway.get<FriendsResult>('friends/'),
+  getFriendById: (id: number) => gateway.get<FriendResult>('friends/' + id),
   getFriendByEmail: (email: string) =>
     gateway.get<FriendsResult>('friends/get?email=' + email),
   updateFriend: (friend: Required<Friend>) =>
