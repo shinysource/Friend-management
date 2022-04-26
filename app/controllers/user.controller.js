@@ -9,77 +9,54 @@ exports.create =
 [
   check('username', 'Username is required').not().isEmpty(),
   check('email', 'Email is required').not().isEmpty().isEmail(),
-  check('password', 'Password is required').not().isEmpty(),
+  check('password', 'Password is required').not().isEmpty().isLength(6, 15),
   (req, res) => {
   const errors = validationResult(req);
 
   // If some error occurs, then this
   // block of code will run
   if (!errors.isEmpty()) {
-      res.json(errors)
+      return res.json(errors)
   }
   
-  // Save User to Database
-  User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+  new Promise((resolve, reject) => {
+    if (req.body.roles) {
+      Role.findAll({
+        where: {
+          name: req.body.roles
+        }
+      }).then(roles => {
+        resolve(2)
+      });
+    } else {
+      resolve(1)
+    }
   })
-    .then(user => {
+  .then(roleId => {
+    console.log('new promise: ', roleId)
 
-      if (req.body.roles) {
-        Role.findAll({
-          where: {
-            name: req.body.roles
-          }
-        }).then(roles => {
-          user.setRoles(roles).then(() => {
-            temp = {
-              id: user.id,
-              username: user.username,
-              email: user.email,
-              password: user.password,
-              roles: req.body.roles
-            }
-            res.status(200).json(
-              {
-                data: {
-                  user: temp,
-                  message: 'User created successfully!'
-                }
-              });
-          });
-        });
-      } else {
-        // user role = 1
-        user.setRoles([1]).then(() => {
-          temp = {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            password: user.password,
-            roles: 'user'
-          }
-          res.status(200).json({
-            data: {
-              user: temp,
-              message: "User created successfully!"
-            }
-          });
-        });
-      }
+    return User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+      roleId: roleId
     })
-    .catch(err => {
-      res.status(500).json({ data: { message: err.message }});
-    });
+  })
+  .then(user => {
+    res.status(200).json(
+      {
+        data: {
+          user: user,
+          message: 'User created successfully!'
+        }
+      });
+  })
+  .catch(err => {
+    res.status(500).json({ data: { message: err.message }});
+  });
 }];
 
 exports.findAll = (req, res) => {
-  // const username = req.query.username
-  // const email = req.query.email
-
-  // let condition = username ? { username: { [Op.like]: `%${username}%` } } : null
-  // condition = email ? { email: email } : null
   User.findAll()
     .then(user => {
       res.status(200).send({
@@ -182,27 +159,6 @@ exports.delete = (req, res) => {
           }
         })
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        data: {
-          message: err.message || "Some error occured while retrieving tutorials."
-        }
-      })
-    })
-};
-
-exports.deleteAll = (req, res) => {
-  User.destroy({
-    where: {},
-    truncate: false
-  })
-    .then(nums => {
-        res.status(200).send({
-          data: {
-            message: `${nums} Users was deleted successfully.`
-          }
-        })
     })
     .catch(err => {
       res.status(500).send({

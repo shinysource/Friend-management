@@ -1,8 +1,16 @@
 const { check, validationResult } = require('express-validator');
+const { authJwt } = require("../middleware");
 
 const db = require("../models");
 const Friend = db.friend;
+const User = db.user;
 const Op = db.Sequelize.Op;
+
+const isAdmin = async (req) => {
+  await User.findByPk(req.userId).then(async user => {
+    return req.user.roleId;
+  })
+};
 
 exports.create = [check('friendname', 'Friendname is required').not().isEmpty(),
   (req, res) => {
@@ -11,16 +19,11 @@ exports.create = [check('friendname', 'Friendname is required').not().isEmpty(),
   // If some error occurs, then this
   // block of code will run
   if (!errors.isEmpty()) {
-      res.json(errors)
+      return res.json(errors)
   }
 
   Friend.create({
-    friendname: req.body.friendname,
-    email: req.body.email,
-    gender: req.body.gender,
-    age: req.body.age,
-    hobbies: req.body.hobbies,
-    description: req.body.description,
+    ...req.body,
     userId: req.user.id
   })
     .then(friend => {
@@ -36,61 +39,44 @@ exports.create = [check('friendname', 'Friendname is required').not().isEmpty(),
     });
 }]
 
-exports.findAll = (req, res) => {
-  // const friendname = req.query.friendname
-  // const email = req.query.email
-  
-  // let condition = {[Op.or]: [
-  //   {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
-  //   {email: email ? { email: email } : null}
-  // ]}
+exports.findAll = async (req, res) => {
+  const userId = req.userId
 
-  Friend.findAll()
-    .then(friend => {
-      res.status(200).send({
-        data: { 
-          friends: friend,
-          message: 'Some friends was retrieved successfully'
-        }
-      })
-    })
-    .catch(err => {
-      res.status(500).send({
-        data: {
-          message: err.message || "Some error occured while retrieving friends."
-        }
-      })
-    })
-};
+  await isAdmin(req)
+  
+  let condition = {where: ''}
+  let include = {}
 
-exports.findByUserId = (req, res) => {
-  // const friendname = req.query.friendname
-  // const email = req.query.email
+  if (req.role === "user") {
+    condition = {where: userId ? { userId: userId } : null}
+  } else {
+    console.log('admin')
+    include = {
+      include: [{
+        model: User,
+        required: true,
+        as: "user",
+        attributes: ['username']
+      }]
+    }
+  }
   
-  // let condition = {[Op.or]: [
-  //   {friendname: friendname ? { friendname: { [Op.like]: `%${friendname}%` } } : null},
-  //   {email: email ? { email: email } : null}
-  // ]}
-  condition = {[Op.and]: [
-    {userId: req.user.id}
-  ]}
-  
-  Friend.findAll({ where: condition })
-    .then(friend => {
-      res.status(200).send({
-        data: { 
-          friends: friend,
-          message: 'Some friends was retrieved successfully'
-        }
-      })
+  Friend.findAll(include, condition)
+  .then(friend => {
+    res.status(200).send({
+      data: { 
+        friends: friend,
+        message: 'Some friends was retrieved successfully'
+      }
     })
-    .catch(err => {
-      res.status(500).send({
-        data: {
-          message: err.message || "Some error occured while retrieving friends."
-        }
-      })
+  })
+  .catch(err => {
+    res.status(500).send({
+      data: {
+        message: err.message || "Some error occured while retrieving friends."
+      }
     })
+  })
 };
 
 exports.findOne = (req, res) => {
@@ -187,28 +173,6 @@ exports.delete = (req, res) => {
           }
         })
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        data: {
-          message: err.message || "Some error occured while retrieving tutorials."
-        }
-      })
-    })
-};
-
-exports.deleteAll = (req, res) => {
-  let condition = {userId: req.user.id}
-  Friend.destroy({
-    where: {condition},
-    truncate: false
-  })
-    .then(nums => {
-        res.status(200).send({
-          data: {
-            message: `${nums} Friends was deleted successfully.`
-          }
-        })
     })
     .catch(err => {
       res.status(500).send({
