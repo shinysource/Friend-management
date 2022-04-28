@@ -28,7 +28,8 @@ import {
   getFriends,
   updateFriend,
   deleteFriend,
-  getFriendByEmail
+  getFriendByEmail,
+  initFriend
 } from 'store/friend'
 
 import Header from 'layout/Header'
@@ -91,20 +92,11 @@ const Friend = () => {
       flex: 1
     },
     {
-      field: 'hobbies',
-      headerName: 'Hobbies',
-      flex: 4
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      flex: 4
-    },
-    {
       field: 'actions',
       headerName: 'Actions',
       flex: 2,
       align: 'center',
+      headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => (
         <>
           <GridActionsCellItem
@@ -132,6 +124,9 @@ const Friend = () => {
       .catch((error) => {
         console.log(error)
       })
+    return () => {
+      dispatch(initFriend())
+    }
   }, [dispatch, updated])
 
   return (

@@ -28,7 +28,8 @@ import {
   getFriends,
   updateFriend,
   deleteFriend,
-  getFriendByEmail
+  getFriendByEmail,
+  initFriend
 } from 'store/friend'
 import { getUsers } from 'store/user'
 
@@ -121,6 +122,9 @@ const Friend = () => {
       .catch((error) => {
         console.log(error)
       })
+    return () => {
+      dispatch(initFriend())
+    }
   }, [dispatch, updated])
 
   return (
