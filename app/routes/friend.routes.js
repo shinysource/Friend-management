@@ -1,4 +1,5 @@
 const { authJwt } = require("../middleware");
+const { friend } = require("../middleware");
 const controller = require("../controllers/friend.controller");
 
 module.exports = function(app) {
@@ -24,7 +25,7 @@ module.exports = function(app) {
 
   app.get(
     "/api/friends/:id",
-    [authJwt.verifyToken],
+    [authJwt.verifyToken, friend.isUser],
     controller.findOne
   );
 
