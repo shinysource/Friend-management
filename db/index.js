@@ -21,7 +21,7 @@ console.log("Running SQL seed...")
 // Generate random password for initial admin user
 const hash = bcrypt.hashSync('admin', 8)
 
-const insertUser = `INSERT INTO users (username, email, password, roleId) VALUES ('admin', 'admin@gmail.com', '${hash}', 2); `
+const seedQuery = `INSERT INTO users (username, email, password, roleId) VALUES ('admin', 'admin@gmail.com', '${hash}', 2); `
 
 // Run seed query
 connection.query(seedQuery, err => {
