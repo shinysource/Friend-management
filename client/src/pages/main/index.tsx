@@ -58,7 +58,7 @@ const Main = () => {
   }
 
   const renderMain = () => {
-    switch (user.roles) {
+    switch (user.roleId) {
       case 'admin':
         return renderAdmin()
       case 'user':

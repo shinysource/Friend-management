@@ -19,9 +19,6 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
 import { setChecked, verify, signout } from 'store/auth'
 
-// let pages = ['Friend']
-// let settings = ['Profile']
-
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
@@ -31,7 +28,7 @@ const Header = () => {
 
   let pages = ['Friend']
   let settings = ['Profile']
-  if (user.roles === 'admin') {
+  if (Number(user.roleId) === 2) {
     pages = ['Friend', 'User']
     settings = ['Profile']
   }
