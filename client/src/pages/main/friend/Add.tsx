@@ -129,7 +129,6 @@ const Add = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Avatar
-                      alt={user.username}
                       src="/broken-image.jpg"
                       sx={{
                         bgcolor: green[500],

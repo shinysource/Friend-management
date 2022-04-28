@@ -100,7 +100,11 @@ export const deleteFriend = createAsyncThunk(
 export const friendSlice = createSlice({
   name: 'friend',
   initialState,
-  reducers: {},
+  reducers: {
+    initFriend: (state) => {
+      state.friends = initialState.friends
+    }
+  },
   extraReducers(builder): void {
     builder
       .addCase(createFriend.pending, (state) => {
@@ -173,5 +177,7 @@ export const friendSlice = createSlice({
       })
   }
 })
+
+export const { initFriend } = friendSlice.actions
 
 export default friendSlice.reducer

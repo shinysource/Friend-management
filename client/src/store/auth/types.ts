@@ -14,7 +14,7 @@ export interface User {
   username: string
   email: string
   password: string
-  roles: string
+  roleId: string
 }
 
 export interface AuthState {
