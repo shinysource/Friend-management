@@ -240,7 +240,6 @@ const Profile = () => {
                             variant="contained"
                             label="Update Profile"
                             loading={loading}
-                            startIcon={<PlusOneIcon fontSize="large" />}
                           />
                         </Grid>
                       </Grid>

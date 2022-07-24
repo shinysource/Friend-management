@@ -31,7 +31,7 @@ module.exports = function(app) {
     controller.findOne
   );
 
-  app.put(
+  app.patch(
     "/api/users/:id",
     [authJwt.verifyToken],
     controller.update

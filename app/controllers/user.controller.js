@@ -33,7 +33,6 @@ exports.create =
     }
   })
   .then(roleId => {
-    console.log('new promise: ', roleId)
 
     return User.create({
       username: req.body.username,
@@ -106,12 +105,15 @@ exports.findOne = (req, res) => {
 
 exports.update = (req, res) => {
   const id = req.params.id
+  if (req.body.password) {
+    req.body.password = bcrypt.hashSync(req.body.password, 8)
+  } else {
+    delete req.body.password
+  }
 
-  User.update({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
-  }, {
+  User.update(
+    req.body,
+  {
     where: { id: id }
   })
     .then(num => {

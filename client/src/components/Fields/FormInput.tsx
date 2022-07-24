@@ -17,6 +17,7 @@ interface FormInputProps {
   handleChange?: (evt: ChangeEvent<HTMLInputElement>) => void
   formik?: FormikValues
   isHint?: boolean
+  multiline?: boolean
 }
 
 const FormInput = ({
@@ -29,7 +30,8 @@ const FormInput = ({
   prefix,
   handleChange,
   formik,
-  isHint
+  isHint,
+  multiline
 }: FormInputProps) => {
   return (
     <FormGroup>
@@ -55,6 +57,7 @@ const FormInput = ({
               }
             : {}
         }
+        multiline={multiline ? multiline : false}
       />
     </FormGroup>
   )

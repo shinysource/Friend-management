@@ -58,10 +58,10 @@ const Main = () => {
   }
 
   const renderMain = () => {
-    switch (user.roleId) {
-      case 'admin':
+    switch (String(user.roleId)) {
+      case String(2):
         return renderAdmin()
-      case 'user':
+      case String(1):
         return renderUser()
       default:
         return renderUser()

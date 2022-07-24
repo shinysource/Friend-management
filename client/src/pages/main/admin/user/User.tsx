@@ -112,8 +112,7 @@ const User = () => {
         <Card>
           <Grid item xs={12}>
             <div className="flex justify-center">
-              <p className="font-podium49 text-4xl uppercase text-grey">{`${user.username}`}</p>
-              <p className="font-podium49 text-4xl uppercase">'s New Friend</p>
+              <span className="font-podium49 text-4xl uppercase">Users</span>
             </div>
           </Grid>
           <CardContent>
@@ -124,7 +123,7 @@ const User = () => {
                     type="button"
                     model="primary"
                     variant="contained"
-                    label="ADD Friend"
+                    label="ADD User"
                     startIcon={<PlusOneIcon fontSize="large" />}
                   />
                 </Link>
@@ -135,7 +134,7 @@ const User = () => {
                 <DataGrid
                   components={{
                     NoRowsOverlay: () => (
-                      <p className="flex justify-center py-9">No Friends</p>
+                      <p className="flex justify-center py-9">No Users</p>
                     )
                   }}
                   autoHeight

@@ -55,8 +55,8 @@ const apiService = {
   getUser: (id: number) => gateway.get<UserResult>('users/' + id),
   createUser: (user: Required<User>) =>
     gateway.post<UsersResult>('users/', user),
-  updateUser: (user: Required<User>) =>
-    gateway.put<UsersResult>('users/' + user.id, user),
+  updateUser: (user: Partial<User>) =>
+    gateway.patch<UsersResult>('users/' + user.id, user),
   deleteUser: (id: number) => gateway.delete<UsersResult>('users/' + id),
 
   createFriend: (newFriend: Required<NewFriend>) =>

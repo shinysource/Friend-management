@@ -46,6 +46,11 @@ const App = () => {
       </Routes>
     )
   }
+  // window.onbeforeunload = function () {
+  //   localStorage.removeItem('token')
+  //   return ''
+  // }
+
   return (
     <>
       <ToastContainer />

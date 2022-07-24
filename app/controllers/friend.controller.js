@@ -44,24 +44,21 @@ exports.findAll = async (req, res) => {
 
   await isAdmin(req)
   
-  let condition = {where: ''}
-  let include = {}
-
-  if (req.role === "user") {
-    condition = {where: userId ? { userId: userId } : null}
+  let condition = []
+  let join = []
+  if (req.user.roleId === 1) {
+    condition = [userId ? { userId } : null]
   } else {
     console.log('admin')
-    include = {
-      include: [{
-        model: User,
-        required: true,
-        as: "user",
-        attributes: ['username']
-      }]
-    }
+    join = [{
+      model: User,
+      required: true,
+      as: "user",
+      attributes: ['username']
+    }]
   }
-  
-  Friend.findAll(include, condition)
+
+  Friend.findAll({include: join ? join : '', where: condition ? condition : ''})
   .then(friend => {
     res.status(200).send({
       data: { 

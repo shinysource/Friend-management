@@ -191,6 +191,44 @@ const Profile = () => {
                           isHint={true}
                         />
                       </Grid>
+                      <Grid item container justifyContent="end">
+                        <Grid item xs={4}>
+                          <CustomButton
+                            type="submit"
+                            model="primary"
+                            variant="contained"
+                            label="Update Profile"
+                            loading={loading}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </Grid>
+
+                <Grid item xs={10} className="!mx-auto">
+                  <Divider textAlign="left">Change your password</Divider>
+                  <form onSubmit={formik.handleSubmit} className="pt-3">
+                    <Grid
+                      item
+                      container
+                      justifyContent="center"
+                      spacing={2}
+                      xs={12}
+                    >
+                      <Grid item xs={12}>
+                        <FormInput
+                          type="password"
+                          id="password_cur"
+                          name="password_cur"
+                          formik={formik}
+                          handleChange={formik.handleChange}
+                          className="font-inter text-base font-normal"
+                          label="Current password"
+                          placeholder="Current Password"
+                          isHint={true}
+                        />
+                      </Grid>
                       <Grid item xs={12}>
                         <FormInput
                           type="password"
@@ -239,9 +277,8 @@ const Profile = () => {
                             type="submit"
                             model="primary"
                             variant="contained"
-                            label="Update Profile"
+                            label="Change your password"
                             loading={loading}
-                            startIcon={<PlusOneIcon fontSize="large" />}
                           />
                         </Grid>
                       </Grid>

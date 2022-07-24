@@ -25,7 +25,6 @@ import CustomButton from 'components/Button/CustomButton'
 import FormInput from 'components/Fields/FormInput'
 import FormSelect from 'components/Fields/FormMultiSelect'
 import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
-import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
@@ -36,7 +35,10 @@ import Header from 'layout/Header'
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Enter your username'),
   email: Yup.string().required('Enter your Email').email('Enter a valid Email'),
-  password: Yup.string().required('Enter your password'),
+  password: Yup.string().min(
+    6,
+    'Password is too short - should be 6 chars minimum.'
+  ),
   password_conf: Yup.string().oneOf(
     [Yup.ref('password'), null],
     'Passwords must match'
@@ -52,9 +54,6 @@ interface userForm {
 }
 
 const Edit = () => {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(false)
-
   const loaction = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -69,7 +68,6 @@ const Edit = () => {
       .unwrap()
       .then((resolve) => {})
       .catch((error) => {
-        handleClose()
         toast.error(error.message)
       })
   }, [])
@@ -82,29 +80,20 @@ const Edit = () => {
     password_conf: ''
   }
 
-  const handleConfirmModal = () => {
-    setOpen(true)
-  }
-
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values, actions) => {
-      handleConfirmModal()
-      if (value) {
-        dispatch(updateUser(values))
-          .unwrap()
-          .then((resolve) => {
-            toast.success('User was updateded successfully')
-            navigate('/user')
-          })
-          .catch((error) => {
-            toast.error(error.message)
-          })
-        actions.resetForm()
-      } else {
-        return
-      }
+      dispatch(updateUser(values))
+        .unwrap()
+        .then((resolve) => {
+          toast.success('User was updateded successfully')
+          navigate('/user')
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        })
+      actions.resetForm()
     }
   })
 
@@ -115,15 +104,6 @@ const Edit = () => {
     formik.setFieldValue('password', '')
     formik.setFieldValue('password_conf', '')
   }, [user.data, formik.setFieldValue])
-
-  const handleClose = (newValue?: boolean) => {
-    setOpen(false)
-
-    if (newValue) {
-      setValue(newValue)
-      formik.handleSubmit()
-    }
-  }
 
   return (
     <>
@@ -167,12 +147,9 @@ const Edit = () => {
               >
                 <Grid item xs={12}>
                   <div className="flex justify-center">
-                    <p className="font-podium49 text-4xl uppercase text-grey">
-                      User's
-                    </p>
-                    <p className="font-podium49 text-4xl uppercase">
-                      &nbsp;profile
-                    </p>
+                    <span className="font-podium49 text-4xl uppercase">
+                      {user.data.username}
+                    </span>
                   </div>
                 </Grid>
 
@@ -260,7 +237,6 @@ const Edit = () => {
                             variant="contained"
                             label="Update Profile"
                             loading={loading}
-                            startIcon={<PlusOneIcon fontSize="large" />}
                           />
                         </Grid>
                       </Grid>
@@ -269,13 +245,6 @@ const Edit = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <ConfirmDialog
-              id="add-friend"
-              keepMounted
-              open={open}
-              onClose={handleClose}
-              value={value}
-            />
           </CardContent>
         </Card>
       </Container>

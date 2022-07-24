@@ -72,7 +72,12 @@ const Friend = () => {
     { field: 'id', headerName: 'Id', flex: 1 },
     { field: 'friendname', headerName: 'Name', flex: 3 },
     { field: 'email', headerName: 'Email', flex: 4 },
-    { field: 'gender', headerName: 'Gender', flex: 2 },
+    {
+      field: 'gender',
+      headerName: 'Gender',
+      flex: 2,
+      cellClassName: 'capitalize'
+    },
     {
       field: 'age',
       headerName: 'Age',
@@ -80,7 +85,7 @@ const Friend = () => {
       flex: 1
     },
     {
-      field: 'userId',
+      field: 'username',
       headerName: 'User',
       flex: 4
     },

@@ -25,7 +25,6 @@ import CustomButton from 'components/Button/CustomButton'
 import FormInput from 'components/Fields/FormInput'
 import FormSelect from 'components/Fields/FormMultiSelect'
 import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
-import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
@@ -35,7 +34,8 @@ import Header from 'layout/Header'
 
 const validationSchema = Yup.object().shape({
   friendname: Yup.string().required('Enter your username'),
-  email: Yup.string().required('Enter your Email').email('Enter a valid Email')
+  email: Yup.string().required('Enter your Email').email('Enter a valid Email'),
+  age: Yup.number().min(1, 'Enter a correct age')
 })
 
 const hobbies = [
@@ -65,50 +65,28 @@ const initialValues: FriendForm = {
 }
 
 const Add = () => {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(false)
-
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
-  const handleConfirmModal = () => {
-    setOpen(true)
-  }
-
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values, actions) => {
-      handleConfirmModal()
-      if (value) {
-        formik.setFieldValue('acceptReceive', false)
-        dispatch(createFriend(values))
-          .unwrap()
-          .then((resolve) => {
-            toast.success('Friend was added successfully')
-            navigate('/friend')
-          })
-          .catch((error) => {
-            handleClose()
-            toast.error(error.message)
-          })
-        actions.resetForm()
-      } else {
-        return
-      }
+      formik.setFieldValue('acceptReceive', false)
+      dispatch(createFriend(values))
+        .unwrap()
+        .then((resolve) => {
+          toast.success('Friend was added successfully')
+          navigate('/friend')
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        })
+      actions.resetForm()
     }
   })
-
-  const handleClose = (newValue?: boolean) => {
-    setOpen(false)
-
-    if (newValue) {
-      setValue(newValue)
-      formik.handleSubmit()
-    }
-  }
 
   return (
     <>
@@ -254,6 +232,7 @@ const Add = () => {
                           label="Description"
                           placeholder="Description"
                           isHint={true}
+                          multiline={true}
                         />
                       </Grid>
                       <Grid item container justifyContent="space-between">
@@ -289,13 +268,6 @@ const Add = () => {
               </Grid>
             </Grid>
           </CardContent>
-          <ConfirmDialog
-            id="add-friend"
-            keepMounted
-            open={open}
-            onClose={handleClose}
-            value={value}
-          />
         </Card>
       </Container>
     </>

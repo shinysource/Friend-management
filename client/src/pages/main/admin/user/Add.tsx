@@ -25,7 +25,6 @@ import CustomButton from 'components/Button/CustomButton'
 import FormInput from 'components/Fields/FormInput'
 import FormSelect from 'components/Fields/FormMultiSelect'
 import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
-import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
@@ -36,7 +35,9 @@ import Header from 'layout/Header'
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Enter your username'),
   email: Yup.string().required('Enter your Email').email('Enter a valid Email'),
-  password: Yup.string().required('Enter your password'),
+  password: Yup.string()
+    .required('Enter your password')
+    .min(6, 'Password is too short - should be 6 chars minimum.'),
   password_conf: Yup.string().oneOf(
     [Yup.ref('password'), null],
     'Passwords must match'
@@ -60,50 +61,28 @@ const initialValues: userForm = {
 }
 
 const Profile = () => {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(false)
-
   const loaction = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state: RootState) => state.auth)
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
-  const handleConfirmModal = () => {
-    setOpen(true)
-  }
-
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values, actions) => {
-      handleConfirmModal()
-      if (value) {
-        dispatch(createUser(values))
-          .unwrap()
-          .then((resolve) => {
-            toast.success('User was created successfully')
-            navigate('/user')
-          })
-          .catch((error) => {
-            handleClose()
-            toast.error(error.message)
-          })
-        actions.resetForm()
-      } else {
-        return
-      }
+      dispatch(createUser(values))
+        .unwrap()
+        .then((resolve) => {
+          toast.success('User was created successfully')
+          navigate('/user')
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        })
+      actions.resetForm()
     }
   })
-
-  const handleClose = (newValue?: boolean) => {
-    setOpen(false)
-
-    if (newValue) {
-      setValue(newValue)
-      formik.handleSubmit()
-    }
-  }
 
   return (
     <>
@@ -124,7 +103,6 @@ const Profile = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Avatar
-                      alt={user.username}
                       src="/broken-image.jpg"
                       sx={{
                         bgcolor: green[500],
@@ -147,9 +125,9 @@ const Profile = () => {
               >
                 <Grid item xs={12}>
                   <div className="flex justify-center">
-                    <p className="font-podium49 text-4xl uppercase">
-                      Add profile
-                    </p>
+                    <span className="font-podium49 text-4xl uppercase">
+                      New User
+                    </span>
                   </div>
                 </Grid>
 
@@ -216,7 +194,7 @@ const Profile = () => {
 
                       <Grid item container justifyContent="space-between">
                         <Grid item xs={4}>
-                          <Link to="/friend">
+                          <Link to="/user">
                             <CustomButton
                               type="button"
                               model="primary"
@@ -235,7 +213,7 @@ const Profile = () => {
                             type="submit"
                             model="primary"
                             variant="contained"
-                            label="Create Profile"
+                            label="add user"
                             loading={loading}
                             startIcon={<PlusOneIcon fontSize="large" />}
                           />
@@ -246,13 +224,6 @@ const Profile = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <ConfirmDialog
-              id="add-friend"
-              keepMounted
-              open={open}
-              onClose={handleClose}
-              value={value}
-            />
           </CardContent>
         </Card>
       </Container>

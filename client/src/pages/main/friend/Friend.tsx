@@ -84,7 +84,12 @@ const Friend = () => {
     { field: 'id', headerName: 'Id', flex: 1 },
     { field: 'friendname', headerName: 'Name', flex: 2 },
     { field: 'email', headerName: 'Email', flex: 3 },
-    { field: 'gender', headerName: 'Gender', flex: 1 },
+    {
+      field: 'gender',
+      headerName: 'Gender',
+      flex: 1,
+      cellClassName: 'capitalize'
+    },
     {
       field: 'age',
       headerName: 'Age',
@@ -143,8 +148,10 @@ const Friend = () => {
         <Card>
           <Grid item xs={12}>
             <div className="flex justify-center">
-              <p className="font-podium49 text-4xl uppercase text-grey">{`${user.username}`}</p>
-              <p className="font-podium49 text-4xl uppercase">'s New Friend</p>
+              <span className="font-podium49 text-4xl uppercase text-grey">{`${user.username}`}</span>
+              <span className="font-podium49 text-4xl uppercase">
+                's Friend
+              </span>
             </div>
           </Grid>
           <CardContent>

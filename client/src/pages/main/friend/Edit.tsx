@@ -25,7 +25,6 @@ import CustomButton from 'components/Button/CustomButton'
 import FormInput from 'components/Fields/FormInput'
 import FormSelect from 'components/Fields/FormMultiSelect'
 import CustomBreadcrumbs from 'components/Breadcrumbs/CustomBreadcrumbs'
-import ConfirmDialog from 'components/Dialog/ConfirmDialog'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { RootState } from 'store/store'
@@ -35,7 +34,8 @@ import Header from 'layout/Header'
 
 const validationSchema = Yup.object().shape({
   friendname: Yup.string().required('Enter your username'),
-  email: Yup.string().required('Enter your Email').email('Enter a valid Email')
+  email: Yup.string().required('Enter your Email').email('Enter a valid Email'),
+  age: Yup.number().min(1, 'Enter a correct age')
 })
 
 const hobbies = [
@@ -69,9 +69,6 @@ const initialValues: FriendForm = {
 }
 
 const Edit = () => {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(false)
-
   const loaction = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -79,10 +76,6 @@ const Edit = () => {
   const { loading, friend } = useAppSelector((state: RootState) => state.friend)
 
   const pathnames = loaction.pathname.split('/').filter((x) => x)
-
-  const handleConfirmModal = () => {
-    setOpen(true)
-  }
 
   useEffect(() => {
     dispatch(getFriendById(Number(pathnames.at(-1))))
@@ -97,38 +90,23 @@ const Edit = () => {
     initialValues: friend.data ?? {},
     validationSchema,
     onSubmit: (values, actions) => {
-      handleConfirmModal()
-      if (value) {
-        formik.setFieldValue('acceptReceive', false)
-        dispatch(updateFriend(values))
-          .unwrap()
-          .then((resolve) => {
-            toast.success('Friend was updateded successfully')
-            navigate('/friend')
-          })
-          .catch((error) => {
-            handleClose()
-            toast.error(error.message)
-          })
-        actions.resetForm()
-      } else {
-        return
-      }
+      formik.setFieldValue('acceptReceive', false)
+      dispatch(updateFriend(values))
+        .unwrap()
+        .then((resolve) => {
+          toast.success('Friend was updateded successfully')
+          navigate('/friend')
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        })
+      actions.resetForm()
     }
   })
 
   useEffect(() => {
     formik.setValues(friend.data)
   }, [friend.data, formik.setValues])
-
-  const handleClose = (newValue?: boolean) => {
-    setOpen(false)
-
-    if (newValue) {
-      setValue(newValue)
-      formik.handleSubmit()
-    }
-  }
 
   return (
     <>
@@ -261,7 +239,6 @@ const Edit = () => {
                           placeholder="Select your country"
                           multiple={true}
                           formik={formik}
-                          // handleChange={formik.handleChange}
                           isHint={true}
                         />
                       </Grid>
@@ -276,6 +253,7 @@ const Edit = () => {
                           label="Description"
                           placeholder="Description"
                           isHint={true}
+                          multiline={true}
                         />
                       </Grid>
                       <Grid item container justifyContent="space-between">
@@ -301,7 +279,6 @@ const Edit = () => {
                             variant="contained"
                             label="Update Friend"
                             loading={loading}
-                            startIcon={<PlusOneIcon fontSize="large" />}
                           />
                         </Grid>
                       </Grid>
@@ -310,13 +287,6 @@ const Edit = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <ConfirmDialog
-              id="add-friend"
-              keepMounted
-              open={open}
-              onClose={handleClose}
-              value={value}
-            />
           </CardContent>
         </Card>
       </Container>
